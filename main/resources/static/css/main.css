@@ -1,0 +1,641 @@
+@charset "UTF-8";
+
+/* ==================== 기본 설정 ==================== */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    margin: 0;
+    font-family: 'Segoe UI', 'Noto Sans KR', sans-serif;
+    font-size: 18px;
+    padding: 0 32px;
+    box-sizing: border-box;
+    background-color: #f9fafb;
+    min-height: 100vh;
+}
+
+/* ==================== 기존 Header 주석처리 (슬라이더용 .main-header 사용) ==================== */
+/*
+header {
+    background: #ff726f;
+    padding: 20px 40px;
+    box-shadow: 0 3px 10px rgba(255, 114, 111, 0.3);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 -32px;
+}
+
+.logo {
+    color: #fff;
+    font-weight: 700;
+    font-size: 1.8rem;
+    letter-spacing: 1.5px;
+    user-select: none;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+}
+*/
+
+/* ==================== 기존 Auth Section 주석처리 (슬라이더 헤더에 통합) ==================== */
+/*
+.auth-section {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+#user-name-header {
+    color: #fff;
+    font-weight: 500;
+    font-size: 1rem;
+    margin-right: 8px;
+}
+
+.login-btn, .logout-btn {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    padding: 10px 24px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.login-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: translateY(-2px);
+}
+
+.logout-btn {
+    background: rgba(220, 53, 69, 0.2);
+    border-color: rgba(220, 53, 69, 0.3);
+}
+
+.logout-btn:hover {
+    background: rgba(220, 53, 69, 0.4);
+    border-color: rgba(220, 53, 69, 0.5);
+    transform: translateY(-2px);
+}
+*/
+
+/* ==================== 기존 Navigation 주석처리 (이제 .secondary-nav 사용) ==================== */
+/*
+nav {
+    background-color: rgba(255, 240, 240, 0.95);
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    padding: 12px 0;
+    border-top: 1px solid #ffd2cc;
+    border-bottom: 1px solid #ffd2cc;
+    position: sticky;
+    top: 76px;
+    z-index: 1100;
+    margin: 0 -32px;
+    backdrop-filter: blur(10px);
+}
+*/
+
+/* ==================== Secondary Navigation (슬라이더 아래) ==================== */
+.secondary-nav {
+    background-color: rgba(255, 240, 240, 0.95);
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    padding: 12px 0;
+    border-top: 1px solid #ffd2cc;
+    border-bottom: 1px solid #ffd2cc;
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    backdrop-filter: blur(10px);
+}
+
+.nav-item {
+    position: relative;
+}
+
+.nav-link {
+    color: #ff726f;
+    padding: 8px 16px;
+    font-size: 1rem;
+    font-weight: 500;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    display: inline-block;
+    text-decoration: none;
+}
+
+.nav-link:hover, .nav-item:hover > .nav-link {
+    background-color: #ff726f;
+    color: white;
+    transform: translateY(-1px);
+}
+
+.dropdown {
+    position: absolute;
+    top: 125%;
+    left: 0;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    padding: 12px 0;
+    min-width: 180px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.25s ease;
+    z-index: 1005;
+}
+
+.nav-item:hover .dropdown {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.dropdown a {
+    padding: 12px 24px;
+    display: block;
+    font-weight: 500;
+    font-size: 0.9rem;
+    color: #ff726f;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.dropdown a:hover {
+    background-color: #ffe3e1;
+    color: #b53e38;
+    padding-left: 28px;
+}
+
+/* ==================== Container 수정 (슬라이더 아래로 위치 조정) ==================== */
+.container {
+    /* 기존 패딩 제거 - 슬라이더가 전체 화면을 차지하므로 */
+    padding: 0;
+}
+
+/* ==================== Login Notice ==================== */
+.login-notice {
+    text-align: center;
+    padding: 80px 20px;
+    animation: fadeIn 0.6s ease;
+}
+
+.notice-card {
+    background: linear-gradient(135deg, #fff 0%, #fff5f5 100%);
+    border: 2px solid #ffe0e0;
+    border-radius: 20px;
+    padding: 60px 40px;
+    max-width: 600px;
+    margin: 0 auto;
+    box-shadow: 0 10px 30px rgba(255, 114, 111, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.notice-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 114, 111, 0.05) 0%, transparent 70%);
+    animation: pulse 3s ease-in-out infinite;
+}
+
+.notice-card h2 {
+    color: #ff726f;
+    margin-bottom: 20px;
+    font-size: 2.2rem;
+    position: relative;
+}
+
+.notice-card p {
+    color: #6c757d;
+    margin-bottom: 30px;
+    line-height: 1.6;
+    font-size: 1.1rem;
+    position: relative;
+}
+
+.big-login-btn {
+    background: linear-gradient(135deg, #ff726f 0%, #ff8a88 100%);
+    color: white;
+    border: none;
+    padding: 18px 50px;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    font-weight: 600;
+    box-shadow: 0 6px 20px rgba(255, 114, 111, 0.3);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.big-login-btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.big-login-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(255, 114, 111, 0.4);
+}
+
+.big-login-btn:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+/* ==================== Service Cards ==================== */
+.service-cards {
+    max-width: 1200px;
+    margin: 60px auto 100px auto;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    padding: 0 16px;
+    animation: slideUp 0.6s ease;
+}
+
+.service-card {
+    width: 100%;
+    max-width: 880px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: linear-gradient(135deg, #fff 0%, #fafafa 100%);
+    border-radius: 24px;
+    padding: 32px 40px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    gap: 30px;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 114, 111, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.service-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 114, 111, 0.05), transparent);
+    transition: left 0.5s;
+}
+
+.service-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+    border-color: rgba(255, 114, 111, 0.2);
+}
+
+.service-card:hover::before {
+    left: 100%;
+}
+
+.service-card-left {
+    flex: 1;
+    color: #ff726f;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.service-card-left h1 {
+    font-size: 1.8rem;
+    line-height: 1.3;
+    font-weight: 700;
+    margin: 0;
+    color: #ff726f;
+}
+
+.service-card-left h2 {
+    font-size: 1.4rem;
+    line-height: 1.3;
+    margin: 0;
+    color: #666;
+    font-weight: 500;
+}
+
+.service-card-left h3 {
+    font-size: 1rem;
+    font-weight: 400;
+    margin: 0;
+    color: #888;
+}
+
+.balance-text {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #ff726f;
+    margin: 10px 0;
+}
+
+.balance-amount {
+    color: #333;
+    font-size: 2rem;
+}
+
+.service-card-right {
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-items: flex-end;
+}
+
+.history-btn {
+    font-weight: 600;
+    font-size: 1rem;
+    padding: 14px 32px;
+    color: #ff726f;
+    border-radius: 25px;
+    border: 2px solid #ff726f;
+    background-color: transparent;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 140px;
+}
+
+.history-btn:hover {
+    background-color: #ff726f;
+    color: white;
+    transform: translateX(-3px);
+    box-shadow: 0 5px 15px rgba(255, 114, 111, 0.3);
+}
+
+/* ==================== Footer ==================== */
+footer {
+    text-align: center;
+    padding: 30px 0;
+    color: #999;
+    font-weight: 400;
+    font-size: 0.9rem;
+    background: linear-gradient(to top, #fff4f2, #fff);
+    box-shadow: inset 0 1px 0 #ffd3ce;
+    margin: 0 -32px;
+}
+
+/* ==================== Welcome Modal ==================== */
+.welcome-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    visibility: hidden;
+    background: rgba(0,0,0,0.5);
+    z-index: 2000;
+    text-align: center;
+    transition: opacity 0.3s ease;
+}
+
+.welcome-modal.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.welcome-modal .modal-content {
+    background: white;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+    font-family: 'Noto Sans KR', 'Segoe UI', sans-serif;
+}
+
+.welcome-modal h2 {
+    color: #ff726f;
+    margin-bottom: 20px;
+    font-size: 1.8rem;
+}
+
+.welcome-modal p {
+    color: #666;
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+
+.welcome-modal button {
+    background: #ff726f;
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.welcome-modal button:hover {
+    background: #ff5a57;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 114, 111, 0.3);
+}
+
+/* ==================== 추가 스타일 ==================== */
+.no-service-notice {
+    text-align: center;
+    padding: 30px;
+    width: 100%;
+}
+
+.create-service-btn {
+    padding: 12px 30px;
+    background: #ff726f;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.error-notice {
+    text-align: center;
+    padding: 30px;
+    color: #666;
+}
+
+.retry-btn {
+    padding: 10px 20px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+}
+
+.loading-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255,255,255,0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* ==================== Animations ==================== */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+}
+
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -45%);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+}
+
+/* ==================== Responsive ==================== */
+@media (max-width: 768px) {
+    body {
+        padding: 0 16px;
+    }
+    
+    .welcome-modal .modal-content {
+        width: 90%;
+        padding: 30px 20px;
+    }
+    
+    .secondary-nav {
+        gap: 20px;
+        flex-wrap: wrap;
+        padding: 10px 20px;
+        justify-content: flex-start;
+    }
+
+    .nav-item {
+        flex: 0 1 auto;
+    }
+    
+    .service-card {
+        flex-direction: column;
+        padding: 28px 24px;
+        gap: 24px;
+    }
+
+    .service-card-left h1 {
+        font-size: 1.5rem;
+    }
+
+    .service-card-left h2 {
+        font-size: 1.2rem;
+    }
+
+    .balance-text {
+        font-size: 1.3rem;
+    }
+
+    .balance-amount {
+        font-size: 1.6rem;
+    }
+    
+    .service-card-right {
+        width: 100%;
+        flex-direction: row;
+        justify-content: center;
+        gap: 12px;
+    }
+    
+    .history-btn {
+        flex: 1;
+        min-width: 120px;
+        padding: 12px 20px;
+    }
+
+    .notice-card {
+        padding: 40px 25px;
+    }
+
+    .notice-card h2 {
+        font-size: 1.8rem;
+    }
+
+    .notice-card p {
+        font-size: 1rem;
+    }
+
+    .big-login-btn {
+        padding: 15px 35px;
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .service-card-left h1 {
+        font-size: 1.3rem;
+    }
+
+    .history-btn {
+        font-size: 0.9rem;
+        padding: 10px 16px;
+    }
+}

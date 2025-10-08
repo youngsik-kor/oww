@@ -1,0 +1,300 @@
+<!-- <!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/base}">
+<head>
+<title layout:fragment="title">Own Wedding Wallet</title>
+<meta charset="UTF-8" />
+<link
+	href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap"
+	rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Own Wedding Wallet</title>
+<link rel="stylesheet" href="/static/css/main.css">
+</head>
+<body>
+
+	<div class="container">
+		<header>
+			<h1 class="logo">Own Wedding Wallet</h1>
+			<div class="auth-section">
+				<div id="logged-out-section" style="display: none;">
+					<button onclick="login()" class="login-btn">로그인</button>
+				</div>
+				<div id="logged-in-section" style="display: none;">
+					<span id="user-name-header">사용자님</span>
+					<button onclick="logout()" class="logout-btn">로그아웃</button>
+				</div>
+			</div>
+		</header>
+
+		<nav>
+			<div class="nav-item">
+				<a href="/banking/main" class="nav-link banking-btn"
+					data-url="http://localhost:8201/banking/main"
+					data-redirect="/banking/main">뱅킹서비스</a>
+				<div class="dropdown">
+					<a href="/banking/createAccount" class="banking-btn"
+						data-url="http://localhost:8201/banking/createAccount"
+						data-redirect="/banking/createAccount">계좌생성</a> <a
+						href="/banking/transfer_1" class="banking-btn"
+						data-url="http://localhost:8201/banking/transfer_1"
+						data-redirect="/banking/transfer_1">이체</a> <a
+						href="/banking/safebox/main" class="banking-btn"
+						data-url="http://localhost:8201/banking/safebox/main"
+						data-redirect="/banking/safebox/main">세이프박스</a>
+				</div>
+			</div>
+			<div class="nav-item">
+				<a href="#wedding" class="nav-link">웨딩플래너</a>
+				<div class="dropdown">
+					<a href="#">추천테마</a> <a href="#">DIY</a>
+				</div>
+			</div>
+
+
+			<a href="/loan/loanmain" class="nav-link loan-btn"
+				data-url="http://localhost:8201/loan/loanmain"
+				data-redirect="/loan/loanmain">대출서비스</a>
+
+			<div class="dropdown">
+				<a href="/loan/loancomparison" class="loan-btn"
+					data-url="http://localhost:8201/loan/loancomparison"
+					data-redirect="/loan/loancomparison">대출상품 비교</a> <a
+					href="/loan/repayment" class="loan-btn"
+					data-url="http://localhost:8201/loan/repayment"
+					data-redirect="/loan/repayment">대출상환</a> <a
+					href="/loan/costcalculate" class="loan-btn"
+					data-url="http://localhost:8201/loan/costcalculate"
+					data-redirect="/loan/costcalculate">상환부담 계산</a>
+			</div>
+
+
+
+
+			<div class="nav-item">
+				<a href="#mypage" class="nav-link">마이페이지</a>
+			</div>
+		</nav>
+
+		<section id="login-notice" class="login-notice" style="display: none;">
+			<div class="notice-card">
+				<h2>로그인이 필요합니다</h2>
+				<p>Own Wedding Wallet의 모든 서비스를 이용하시려면 먼저 로그인해주세요.</p>
+				<button onclick="login()" class="big-login-btn">Google로
+					로그인하기</button>
+			</div>
+		</section>
+		<section id="service-cards" class="service-cards"
+			style="display: none;">
+			<article class="service-card">
+				<div class="service-card-left">
+					<h1>
+						<span id="user-name-display">사용자</span>님의 통장
+					</h1>
+					<h2 id="account-number">계좌 정보 로딩중...</h2>
+					<div class="balance-text">
+						잔액: <span class="balance-amount">로딩중...</span>
+					</div>
+				</div>
+				<div class="service-card-right">
+					<button class="history-btn banking-btn"
+						data-url="http://localhost:8201/banking/transfer_1"
+						data-redirect="/banking/transfer_1">이체하기</button>
+					<button class="history-btn" onclick="alert('내역조회 준비중')">내역조회</button>
+				</div>
+			</article>
+
+			<article class="service-card">
+				<div class="service-card-left">
+					<h1>
+						<span id="user-name-display2">사용자</span>님의 세이프박스
+					</h1>
+					<div class="balance-text">
+						잔액: <span class="balance-amount">로딩중...</span>
+					</div>
+				</div>
+				<div class="service-card-right">
+					<button class="history-btn banking-btn"
+						data-url="http://localhost:8201/banking/safebox"
+						data-redirect="/banking/safebox">관리하기</button>
+				</div>
+			</article>
+		</section>
+
+		<footer>&copy; 2025 Own Wedding Wallet. All rights reserved.</footer>
+	</div>
+
+	Welcome Modal
+	<div id="welcome-modal" class="welcome-modal">
+		<div class="modal-content">
+			<h2>환영합니다!</h2>
+			<p>
+				<span id="modal-user-name">사용자</span>님, Own Wedding Wallet에 오신 것을
+				환영합니다.
+			</p>
+			<button onclick="closeWelcomeModal()">시작하기</button>
+		</div>
+	</div>
+
+	<script src="/static/js/account.js"></script>
+	<script src="/static/js/auth.js"></script>
+</body>
+</html> -->
+
+
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>Own Wedding Wallet</title>
+<meta charset="UTF-8" />
+<link
+	href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap"
+	rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto:wght@400;500&family=Kaushan+Script&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="/static/css/main.css">
+<link rel="stylesheet" href="/static/css/slider.css">
+</head>
+<body>
+
+	<!-- 1세트 스타일의 헤더 (슬라이더 위 오버레이) -->
+	<header class="main-header">
+		<div class="header-wrapper">
+			<div class="main-logo">OWW</div>
+			
+			
+<nav>
+<ul class="main-menu">
+    <li><a href="#section-2">About</a></li>
+    
+    <!-- Bank 메뉴 (드롭다운 추가) -->
+    <li class="nav-item">
+        <a href="/banking/main">Bank</a>
+        <div class="dropdown">
+            <a href="/banking/createAccount" class="banking-btn" 
+               data-url="http://localhost:8201/banking/createAccount" 
+               data-redirect="/banking/createAccount">계좌생성</a>
+            <a href="/banking/transfer_1" class="banking-btn" 
+               data-url="http://localhost:8201/banking/transfer_1" 
+               data-redirect="/banking/transfer_1">이체</a>
+            <a href="/banking/safebox/main" class="banking-btn" 
+               data-url="http://localhost:8201/banking/safebox/main" 
+               data-redirect="/banking/safebox/main">세이프박스</a>
+        </div>
+    </li>
+    
+    <!-- Wedding Plan 메뉴 (드롭다운 추가) -->
+    <li class="nav-item">
+        <a href="#section-7">Wedding Plan</a>
+        <div class="dropdown">
+            <a href="#wedding-theme">추천테마</a>
+            <a href="#wedding-diy">DIY</a>
+        </div>
+    </li>
+    
+    <!-- Loan 메뉴 (드롭다운 추가) -->
+    <li class="nav-item">
+        <a href="/loan/loanmain" class="loan-btn" 
+           data-url="http://localhost:8201/loan/loanmain" 
+           data-redirect="/loan/loanmain">Loan</a>
+        <div class="dropdown">
+            <a href="/loan/loancomparison" class="loan-btn" 
+               data-url="http://localhost:8201/loan/loancomparison" 
+               data-redirect="/loan/loancomparison">대출상품 비교</a>
+            <a href="/loan/repayment" class="loan-btn" 
+               data-url="http://localhost:8201/loan/repayment" 
+               data-redirect="/loan/repayment">대출상환</a>
+            <a href="/loan/costcalculate" class="loan-btn" 
+               data-url="http://localhost:8201/loan/costcalculate" 
+               data-redirect="/loan/costcalculate">상환부담 계산</a>
+        </div>
+    </li>
+    
+    <li><a href="#main-footer">Mypage</a></li>
+    
+    <!-- 로그인 기능 (기존과 동일) -->
+    <li class="auth-menu-item">
+        <div id="logged-out-section" style="display: none;">
+            <a href="#" onclick="login()" class="login-link">로그인</a>
+        </div>
+        <div id="logged-in-section" style="display: none;">
+            <span id="user-name-header">사용자님</span>
+            <a href="#" onclick="logout()" class="logout-link">로그아웃</a>
+        </div>
+    </li>
+</ul>
+</nav>
+			
+			
+		</div>
+	</header>
+
+	<!-- 1세트 스타일의 슬라이더 섹션 -->
+	<section id="section-1">
+		<div class="content-slider">
+			<input type="radio" id="banner1" class="sec-1-input" name="banner" checked>
+			<input type="radio" id="banner2" class="sec-1-input" name="banner">
+			<input type="radio" id="banner3" class="sec-1-input" name="banner">
+			<input type="radio" id="banner4" class="sec-1-input" name="banner">
+			<div class="slider">
+				<div id="top-banner-1" class="banner">
+					<div class="banner-inner-wrapper">
+						<h2>Own Wedding Wallet</h2>
+						<h1>Welcome<br>OWW</h1>
+						<div class="line"></div>
+						<div class="learn-more-button">
+							<a href="#" class="banking-btn" data-url="http://localhost:8201/banking/main" data-redirect="/banking/main">뱅킹 서비스</a>
+						</div>
+					</div>
+				</div>
+				<div id="top-banner-2" class="banner">
+					<div class="banner-inner-wrapper">
+						<h2>Personal Plan</h2>
+						<h1>맞춤형<br>웨딩 패키지</h1>
+						<div class="line"></div>
+						<div class="learn-more-button">
+							<a href="#wedding">웨딩 설계</a>
+						</div>
+					</div>
+				</div>
+				<div id="top-banner-3" class="banner">
+					<div class="banner-inner-wrapper">
+						<h2>Loan</h2>
+						<h1>맞춤형<br>대출 상품</h1>
+						<div class="line"></div>
+						<div class="learn-more-button">
+							<a href="#" class="loan-btn" data-url="http://localhost:8201/loan/loanmain" data-redirect="/loan/loanmain">맞춤 대출</a>
+						</div>
+					</div>
+				</div>
+				<div id="top-banner-4" class="banner">
+					<div class="banner-inner-wrapper">
+						<h2>Private Space</h2>
+						<h1>마이페이지<br>MyPage</h1>
+						<div class="line"></div>
+						<div class="learn-more-button">
+							<a href="#service-cards">Mypage</a>
+						</div>
+					</div>
+				</div>
+			</div>
+			<nav>
+				<div class="controls">
+					<label for="banner1"><span class="progressbar"><span class="progressbar-fill"></span></span><span>01</span> Banking</label>
+					<label for="banner2"><span class="progressbar"><span class="progressbar-fill"></span></span><span>02</span> Wedding</label>
+					<label for="banner3"><span class="progressbar"><span class="progressbar-fill"></span></span><span>03</span> Loan</label>
+					<label for="banner4"><span class="progressbar"><span class="progressbar-fill"></span></span><span>04</span> Mypage</label>
+				</div>
+			</nav>
+		</div>
+	</section>
+
+	<script src="/static/js/account.js"></script>
+	<script src="/static/js/auth.js"></script>
+	<script src="/static/js/slider.js"></script>
+</body>
+</html>

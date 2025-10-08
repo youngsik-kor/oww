@@ -1,0 +1,523 @@
+/* ===== 슬라이더 전용 CSS (1세트에서 추출) ===== */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto:wght@400;500&family=Kaushan+Script&display=swap');
+
+/* 슬라이더용 폰트 변수 */
+:root {
+  --slider-main-font: 'Montserrat','Noto Sans KR',sans-serif;
+  --slider-content-font: 'Roboto','Noto Sans KR',sans-serif;
+  --slider-h3-font: 'Kaushan Script',cursive;
+  
+  --slider-brand: #ec4899;        /* Pink-500 */
+  --slider-brand-weak: #ffe4e6;   /* Rose-100 */
+  --slider-accent: #f472b6;
+}
+
+/* ===== Main Header (슬라이더 위 오버레이) ===== */
+.main-header {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  font-family: var(--slider-main-font);
+  color: #fff;
+  background: transparent;
+}
+
+.main-header .header-wrapper {
+  display: block;
+  width: 70%;
+  margin: 0 auto;
+  padding-top: 1em;
+}
+
+.main-header .main-logo {
+  float: left;
+  font-weight: 700;
+  font-size: 1.875em;
+}
+
+.main-header .main-menu {
+  float: right;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.main-header .main-menu li {
+  display: inline-block;
+  padding: .75em 1.875em;
+}
+
+.main-header .main-menu li a,
+.main-header .main-menu li .login-link,
+.main-header .main-menu li .logout-link {
+  padding-bottom: .75em;
+  text-transform: uppercase;
+  color: #fff;
+  font-size: .875em;
+  border-bottom: 0 solid transparent;
+  transition: .15s;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.main-header .main-menu li a:hover,
+.main-header .main-menu li .login-link:hover,
+.main-header .main-menu li .logout-link:hover {
+  color: var(--slider-brand-weak);
+  border-bottom: .1875em solid var(--slider-brand-weak);
+}
+
+.main-header .main-menu li:last-child {
+  padding: .75em 0;
+}
+
+.main-header .main-menu li:nth-child(6) a:hover,
+.main-header .main-menu li:last-child a:hover {
+  border: none;
+}
+
+/* ===== Header Navigation Dropdown Styles ===== */
+
+/* nav-item 클래스를 가진 li 요소에 상대 위치 설정 */
+.main-header .main-menu li.nav-item {
+  position: relative;
+}
+
+/* 드롭다운 메뉴 기본 스타일 */
+.main-header .dropdown {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 8px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  padding: 0.5em 0;
+  min-width: 160px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(-50%) translateY(-10px);
+  transition: all 0.3s ease;
+  z-index: 1005;
+  margin-top: 0.5em;
+}
+
+/* hover 시 드롭다운 표시 */
+.main-header .nav-item:hover .dropdown {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* 드롭다운 내부 링크 스타일 */
+.main-header .dropdown a {
+  display: block;
+  padding: 0.75em 1.5em;
+  color: var(--slider-brand) !important;
+  font-size: 0.8em !important;
+  font-weight: 500;
+  text-transform: none !important;
+  border-bottom: none !important;
+  transition: all 0.25s ease;
+  white-space: nowrap;
+}
+
+.main-header .dropdown a:hover {
+  background: var(--slider-brand-weak);
+  color: #b91c7c !important;
+  padding-left: 2em;
+  border-bottom: none !important;
+}
+
+/* 드롭다운이 있는 메뉴 아이템에 화살표 표시 */
+.main-header .nav-item > a::after {
+  content: ' ▼';
+  font-size: 0.6em;
+  margin-left: 0.5em;
+  transition: transform 0.3s ease;
+}
+
+.main-header .nav-item:hover > a::after {
+  transform: rotate(180deg);
+}
+
+/* 로그인 관련 스타일 개선 */
+.main-header .auth-menu-item .login-link,
+.main-header .auth-menu-item .logout-link {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 20px;
+  padding: 0.4em 1.2em;
+  font-size: 0.75em;
+  transition: all 0.3s ease;
+}
+
+.main-header .auth-menu-item .login-link:hover,
+.main-header .auth-menu-item .logout-link:hover {
+  background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-2px);
+}
+
+.main-header .auth-menu-item .logout-link {
+  background: rgba(220, 53, 69, 0.2);
+  border-color: rgba(220, 53, 69, 0.3);
+}
+
+.main-header .auth-menu-item .logout-link:hover {
+  background: rgba(220, 53, 69, 0.35);
+  border-color: rgba(220, 53, 69, 0.5);
+}
+
+/* ===== Responsive Dropdown Styles ===== */
+@media (max-width: 860px) {
+  .main-header .dropdown {
+    min-width: 140px;
+    font-size: 0.9em;
+  }
+  
+  .main-header .dropdown a {
+    padding: 0.6em 1.2em;
+    font-size: 0.75em !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .main-header .dropdown {
+    min-width: 120px;
+    left: 0;
+    transform: translateX(0) translateY(-10px);
+  }
+  
+  .main-header .nav-item:hover .dropdown {
+    transform: translateX(0) translateY(0);
+  }
+  
+  .main-header .dropdown a {
+    padding: 0.5em 1em;
+  }
+}
+
+@media (max-width: 480px) {
+  /* 모바일에서는 드롭다운 숨김 */
+  .main-header .dropdown {
+    display: none;
+  }
+  
+  .main-header .nav-item > a::after {
+    display: none;
+  }
+}
+
+/* 로그인 관련 스타일 */
+.main-header .auth-menu-item {
+  position: relative;
+}
+
+.main-header #user-name-header {
+  color: #fff;
+  font-size: 0.875em;
+  margin-right: 10px;
+}
+
+/* ===== Section 1: Slider ===== */
+#section-1 {
+  height: 38em;
+  color: #fff;
+  background-color: #0f151c;
+}
+
+#section-1 .content-slider {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+#section-1 .content-slider input {
+  display: none;
+}
+
+#section-1 .content-slider .slider {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+#section-1 .content-slider .slider .banner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  transition: all .5s ease;
+}
+
+#section-1 .content-slider .slider .banner .banner-inner-wrapper {
+  height: 100%;
+  padding-top: 6em;
+  /* OWW Gradient Overlay */
+  background-image: linear-gradient(rgba(236,72,153,.92), rgba(255,228,230,.92));
+  box-sizing: border-box;
+}
+
+#section-1 .content-slider .slider .banner .banner-inner-wrapper h2 {
+  padding-bottom: .3em;
+  font-family: var(--slider-h3-font);
+  font-weight: 400;
+  font-size: 2.5em;
+  text-transform: none;
+  margin: 0;
+}
+
+#section-1 .content-slider .slider .banner .banner-inner-wrapper h1 {
+  font-size: 6em;
+  line-height: 95%;
+  font-family: var(--slider-main-font);
+  font-weight: 700;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+#section-1 .content-slider .slider .banner .banner-inner-wrapper .line {
+  display: block;
+  width: 4em;
+  height: .1875em;
+  margin: 2.5em auto;
+  background: #fff;
+}
+
+#section-1 .content-slider .slider .banner .banner-inner-wrapper .learn-more-button {
+  padding-bottom: 5em;
+  z-index: 15!important;
+}
+
+#section-1 .content-slider .slider .banner .banner-inner-wrapper .learn-more-button a {
+  padding: .5em 2em;
+  text-align: center;
+  font-family: var(--slider-main-font);
+  font-size: .875em;
+  color: #fff;
+  text-transform: uppercase;
+  border: .1875em solid #fff;
+  transition: .3s;
+  text-decoration: none;
+}
+
+#section-1 .content-slider .slider .banner .banner-inner-wrapper .learn-more-button a:hover {
+  color: var(--slider-brand);
+  border-color: var(--slider-brand);
+}
+
+/* Banner 배경 이미지 */
+#top-banner-1 {
+  background: url('https://checkboxes-demo.webdevs.co.ua/images/mogo/banner-1.png') no-repeat center/cover;
+}
+
+#top-banner-2 {
+  background: url('https://checkboxes-demo.webdevs.co.ua/images/mogo/banner-2.png') no-repeat center/cover;
+}
+
+#top-banner-3 {
+  background: url('https://checkboxes-demo.webdevs.co.ua/images/mogo/banner-3.png') no-repeat center/cover;
+}
+
+#top-banner-4 {
+  background: url('https://checkboxes-demo.webdevs.co.ua/images/mogo/banner-4.png') no-repeat center/cover;
+}
+
+/* Controls */
+#section-1 .content-slider nav {
+  position: absolute;
+  bottom: .5em;
+  width: 100%;
+  z-index: 10;
+  text-align: center;
+}
+
+#section-1 .content-slider nav .controls {
+  display: block;
+  width: 70%;
+  margin: 0 auto;
+  font-family: var(--slider-main-font);
+  color: #fff;
+}
+
+#section-1 .content-slider nav .controls label {
+  position: relative;
+  display: inline-block;
+  width: 20%;
+  height: 3.1em;
+  overflow: hidden;
+  margin: 0 1em;
+  padding-top: 1em;
+  text-align: left;
+  text-transform: uppercase;
+  font-family: var(--slider-main-font);
+  font-size: 1em;
+  color: var(--slider-brand-weak);
+  font-weight: 400;
+  cursor: pointer;
+  transition: all .3s;
+}
+
+#section-1 .content-slider nav .controls label:hover {
+  color: var(--slider-brand);
+}
+
+#section-1 .content-slider nav .controls label .progressbar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 100%;
+  background: var(--slider-brand-weak);
+  z-index: 100;
+}
+
+#section-1 .content-slider nav .controls label .progressbar .progressbar-fill {
+  position: inherit;
+  width: inherit;
+  height: inherit;
+  margin-left: -100%;
+  background: var(--slider-brand);
+}
+
+#section-1 .content-slider nav .controls label span {
+  font-size: 1.4em;
+  font-weight: 700;
+}
+
+/* Active states (radio) */
+#banner1:checked ~ .slider #top-banner-1,
+#banner2:checked ~ .slider #top-banner-2,
+#banner3:checked ~ .slider #top-banner-3,
+#banner4:checked ~ .slider #top-banner-4 {
+  opacity: 1;
+  z-index: 1;
+}
+
+#banner1:checked ~ nav label:nth-of-type(1),
+#banner2:checked ~ nav label:nth-of-type(2),
+#banner3:checked ~ nav label:nth-of-type(3),
+#banner4:checked ~ nav label:nth-of-type(4) {
+  cursor: default;
+  color: #fff;
+  transition: all .5s;
+}
+
+#banner1:checked ~ nav label:nth-of-type(1) .progressbar,
+#banner2:checked ~ nav label:nth-of-type(2) .progressbar,
+#banner3:checked ~ nav label:nth-of-type(3) .progressbar,
+#banner4:checked ~ nav label:nth-of-type(4) .progressbar {
+  background: #fff;
+}
+
+#banner1:checked ~ nav label:nth-of-type(1) .progressbar .progressbar-fill,
+#banner2:checked ~ nav label:nth-of-type(2) .progressbar .progressbar-fill,
+#banner3:checked ~ nav label:nth-of-type(3) .progressbar .progressbar-fill,
+#banner4:checked ~ nav label:nth-of-type(4) .progressbar .progressbar-fill {
+  animation: progressBarFill 5s linear;
+}
+
+/* Animations */
+@keyframes progressBarFill {
+  from { margin-left: -100%; }
+  to { margin-left: 0; }
+}
+
+/* ===== Secondary Navigation (기존 2세트 네비를 슬라이더 아래로) ===== */
+.secondary-nav {
+  background-color: rgba(255, 240, 240, 0.95);
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  padding: 12px 0;
+  border-top: 1px solid #ffd2cc;
+  border-bottom: 1px solid #ffd2cc;
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  backdrop-filter: blur(10px);
+}
+
+/* ===== Media Queries ===== */
+@media (min-width:1920px) {
+  .main-header .header-wrapper { width: 57%; }
+  #section-1 { height: 46em; }
+  #section-1 .content-slider .slider .banner .banner-inner-wrapper { padding-top: 12em; }
+}
+
+@media (max-width:1919px) {
+  .main-header .header-wrapper { width: 60%; }
+  #section-1 { height: 43em; }
+  #section-1 .content-slider .slider .banner .banner-inner-wrapper { padding-top: 11em; }
+}
+
+@media (max-width:1680px) {
+  .main-header .header-wrapper { width: 65%; }
+  #section-1 { height: 40em; }
+  #section-1 .content-slider .slider .banner .banner-inner-wrapper { padding-top: 9em; }
+}
+
+@media (max-width:1366px) {
+  .main-header .header-wrapper { width: 70%; }
+}
+
+@media (max-width:1120px) {
+  .main-header .header-wrapper .main-menu li { padding: .75em 1.4em; }
+  #section-1 { height: 35em; }
+  #section-1 .content-slider nav { bottom: -.2em; }
+  #section-1 .content-slider .slider .banner .banner-inner-wrapper { padding-top: 7em; }
+  #section-1 .content-slider .slider .banner .banner-inner-wrapper .line { margin: 2em auto; }
+}
+
+@media (max-width:1024px) {
+  .main-header .header-wrapper .main-menu li { padding: .75em 1.3em; }
+  #section-1 .content-slider nav { bottom: 0; }
+  #section-1 .content-slider nav .controls { width: 80%; }
+}
+
+@media (max-width:860px) {
+  .main-header .header-wrapper .main-menu li { padding: .75em .9em; }
+  #section-1 { height: 29em; }
+  #section-1 .content-slider nav { bottom: -1em; }
+  #section-1 .content-slider nav .controls { width: 90%; }
+  #section-1 .content-slider .slider .banner .banner-inner-wrapper h2 { font-size: 2em; }
+  #section-1 .content-slider .slider .banner .banner-inner-wrapper h1 { font-size: 4.5em; }
+  #section-1 .content-slider .slider .banner .banner-inner-wrapper { padding-top: 5em; }
+}
+
+@media (max-width:768px) {
+  .main-header .header-wrapper .main-menu li { padding: .75em .5em; }
+  #section-1 { height: 27em; }
+  #section-1 .content-slider nav .controls { width: 100%; }
+  #section-1 .content-slider nav .controls label { width: 19%; font-size: .8em; }
+  #section-1 .content-slider .slider .banner .banner-inner-wrapper .line { margin: 1.7em auto; }
+}
+
+@media (max-width:650px) {
+  .main-header .header-wrapper { width: 95%; }
+}
+
+@media (max-width:480px) {
+  .main-header .header-wrapper { width: 97%; }
+  .main-header .header-wrapper .main-logo { display: none; }
+  .main-header .header-wrapper .main-menu li { padding: .2em .3em; }
+  .main-header .header-wrapper .main-menu li:last-child,
+  .main-header .header-wrapper .main-menu li:nth-child(6) { padding: .2em .7em; }
+  #section-1 { height: 26em; }
+  #section-1 .content-slider nav { bottom: -.5em; }
+  #section-1 .content-slider nav .controls label { width: 40%; font-size: .7em; }
+  #section-1 .content-slider .slider .banner .banner-inner-wrapper h2 { font-size: 1.5em; }
+  #section-1 .content-slider .slider .banner .banner-inner-wrapper h1 { font-size: 3em; }
+  #section-1 .content-slider .slider .banner .banner-inner-wrapper .line { margin: 1.7em auto; }
+}
