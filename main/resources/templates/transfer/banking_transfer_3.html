@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/banking_base}">
+<head>
+    <title layout:fragment="title">Own Wedding Wallet</title>
+
+    <style layout:fragment="page-styles">
+        /* 전체 레이아웃 */
+        .main-layout {
+            display: flex;
+            flex-direction: row;
+            gap: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* 사이드바 (왼쪽) */
+        .leftnav {
+            width: 260px;
+            flex-shrink: 0; /* 줄어들지 않도록 고정 */
+        }
+
+        /* 메인 컨텐츠 (오른쪽) */
+        .container {
+            flex: 1; /* 나머지 공간 채움 */
+            max-width: 100%;
+            margin: 0; /* 중앙정렬 제거 */
+        }
+
+        /* 서비스 카드 */
+        .service-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            padding: 20px;
+        }
+
+        .service-card {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            padding: 40px 50px;
+            box-shadow: 0 8px 25px rgba(200, 162, 200, 0.3);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(200, 162, 200, 0.4);
+        }
+
+        .service-card-center h3 {
+            color: #6b4c6b;
+            font-size: 28px;
+            font-weight: 700;
+            margin: 20px 0;
+        }
+
+        .transfer-btn {
+            padding: 14px 28px;
+            border-radius: 25px;
+            background: linear-gradient(135deg, #c8a2c8 0%, #a569a5 100%);
+            color: white;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(165, 105, 165, 0.3);
+            font-size: 16px;
+        }
+
+        .transfer-btn:hover {
+            background: linear-gradient(135deg, #a569a5 0%, #8b5a8c 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(139, 90, 140, 0.4);
+        }
+
+        .transfer-details {
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(200, 162, 200, 0.2);
+        }
+
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(200, 162, 200, 0.2);
+        }
+
+        .detail-item:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            color: #8b5a8c;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .detail-value {
+            color: #6b4c6b;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .detail-value.amount {
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        /* 반응형 */
+        @media (max-width: 768px) {
+            .main-layout {
+                flex-direction: column;
+            }
+            .leftnav {
+                width: 100%;
+            }
+            .container {
+                width: 100%;
+            }
+            .service-card {
+                margin: 20px;
+                padding: 30px 25px;
+            }
+            .service-card-center h3 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main class="site-content" layout:fragment="content">
+        <div class="main-layout">
+
+            <!-- 왼쪽 사이드바 -->
+            <div th:replace="~{fragments/MainSideBar :: sidebar(
+                ${userName}, 
+                ${userEmail}, 
+                ${totalAssets}, 
+                ${safeboxBalance}, 
+                ${goalPercent}, 
+                'Main')}"></div>
+
+            <!-- 오른쪽 본문 -->
+            <div class="container">
+                <section class="service-cards">
+                    <article class="service-card">
+                        <div class="service-card-center">
+                            <h3>이체가 완료되었습니다</h3>
+                            
+                            <div class="transfer-details">
+                                <div class="detail-item">
+                                    <span class="detail-label">받는 분:</span>
+                                    <span class="detail-value" th:text="${recipientName ?: ''}">홍길동</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">계좌번호:</span>
+                                    <span class="detail-value" th:text="${toAccountNumber ?: ''}">123-4567-8901</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">이체 금액:</span>
+                                    <span class="detail-value amount"
+                                          th:text="${#numbers.formatInteger(amount ?: 0, 3, 'COMMA')} + '원'">10,000원</span>
+                                </div>
+                                <div class="detail-item" th:if="${memo != null and !memo.isEmpty()}">
+                                    <span class="detail-label">메모:</span>
+                                    <span class="detail-value" th:text="${memo}">생일축하해</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">이체 시간:</span>
+                                    <span class="detail-value"
+                                          th:text="${transferTime ?: #temporals.format(#temporals.createNow(), 'yyyy-MM-dd HH:mm')}">2025-01-15 14:30</span>
+                                </div>
+                            </div>
+                            
+                            <button class="transfer-btn" type="button" onclick="location.href='/banking/main'">확인</button>
+                        </div>
+                    </article>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <div layout:fragment="scripts">
+        <script src="/js/auth-buttons.js"></script>
+    </div>
+</body>
+</html>

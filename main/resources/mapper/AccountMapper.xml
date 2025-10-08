@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="oww.banking.mapper.AccountMapper">
+
+	<!-- ResultMap 정의 -->
+	<resultMap id="AccountResultMap"
+		type="oww.banking.vo.AccountVO">
+		<id property="accountId" column="account_id" />
+		<result property="userEmail" column="user_email" />
+		<result property="accountNumber" column="account_number" />
+		<result property="balance" column="balance" />
+		<result property="createdAt" column="created_at"
+			javaType="java.time.LocalDateTime" />
+		<result property="accountPassword" column="account_password" />
+	</resultMap>
+
+	<!-- 계좌 생성 -->
+	<insert id="createAccount"
+		parameterType="oww.banking.vo.AccountVO">
+		<selectKey keyProperty="accountId" resultType="int"
+			order="BEFORE">
+			SELECT ACCOUNT_SEQ.NEXTVAL FROM DUAL
+		</selectKey>
+		INSERT INTO account (
+		account_id,
+		user_email,
+		account_number,
+		balance,
+		created_at,
+		account_password
+		) VALUES (
+		#{accountId},
+		#{userEmail, jdbcType=VARCHAR},
+		#{accountNumber, jdbcType=VARCHAR},
+		#{balance},
+		CURRENT_TIMESTAMP,
+		#{accountPassword, jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<!-- 해시로 계좌 조회 (권장) -->
+	<select id="findAccountByEmailHash" parameterType="String"
+		resultMap="AccountResultMap">
+		SELECT
+		a.account_id,
+		a.user_email,
+		a.account_number,
+		a.balance,
+		a.created_at,
+		a.account_password
+		FROM account a
+		INNER JOIN OWW2.users u ON a.user_email = u.user_email
+		WHERE u.user_email_hash = #{emailHash, jdbcType=VARCHAR}
+	</select>
+
+	<!-- 해시로 계좌 존재 여부 확인 (권장) -->
+	<select id="existsByEmailHash" parameterType="String"
+		resultType="boolean">
+		SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END
+		FROM account
+		a
+		INNER JOIN OWW2.users u ON a.user_email = u.user_email
+		WHERE
+		u.user_email_hash = #{emailHash, jdbcType=VARCHAR}
+	</select>
+
+	<!-- 직접 이메일로 계좌 조회 (필요시만) -->
+	<select id="findAccountByEmail" parameterType="String"
+		resultMap="AccountResultMap">
+		SELECT
+		account_id,
+		user_email,
+		account_number,
+		balance,
+		created_at,
+		account_password
+		FROM account
+		WHERE user_email = #{userEmail, jdbcType=VARCHAR}
+	</select>
+
+	<!-- 직접 이메일로 계좌 존재 여부 확인 (필요시만) -->
+	<select id="existsByEmail" parameterType="String"
+		resultType="boolean">
+		SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END
+		FROM account
+		WHERE user_email = #{userEmail, jdbcType=VARCHAR}
+	</select>
+
+	<!-- 계좌번호로 계좌 존재 여부 확인 -->
+	<select id="existsByAccountNumber" parameterType="String"
+		resultType="boolean">
+		SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END
+		FROM account
+		WHERE account_number = #{accountNumber, jdbcType=VARCHAR}
+	</select>
+
+	<!-- 계좌 ID로 계좌 조회 -->
+	<select id="findAccountById" parameterType="int"
+		resultMap="AccountResultMap">
+		SELECT
+		account_id,
+		user_email,
+		account_number,
+		balance,
+		created_at,
+		account_password
+		FROM account
+		WHERE account_id = #{accountId}
+	</select>
+
+	<!-- 계좌 잔액 업데이트 -->
+	<update id="updateBalance">
+		UPDATE account
+		SET balance = #{balance}
+		WHERE account_id = #{accountId}
+	</update>
+
+	<!-- 계좌 비밀번호 확인 -->
+	<select id="verifyPassword" parameterType="map"
+		resultType="boolean">
+		SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END
+		FROM account
+		WHERE account_id = #{accountId}
+		AND account_password = #{password,
+		jdbcType=VARCHAR}
+	</select>
+
+	<!-- 모든 계좌 조회 (관리자용) -->
+	<select id="findAllAccounts" resultMap="AccountResultMap">
+		SELECT
+		account_id,
+		user_email,
+		account_number,
+		balance,
+		created_at,
+		account_password
+		FROM account
+		ORDER BY created_at DESC
+	</select>
+
+	<!-- 계좌 삭제 -->
+	<delete id="deleteAccount" parameterType="int">
+		DELETE FROM account
+		WHERE account_id = #{accountId}
+	</delete>
+
+	<!-- 시퀀스 다음 값 가져오기 -->
+	<select id="getNextAccountSequence" resultType="int">
+		SELECT
+		ACCOUNT_SEQ.NEXTVAL FROM DUAL
+	</select>
+
+	<!-- 사용자 번호로 계좌 존재 여부 확인 (1계정 1계좌 제한) -->
+	<select id="existsByUserNo" parameterType="int"
+		resultType="boolean">
+		SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END
+		FROM account
+		a
+		INNER JOIN OWW2.users u ON a.user_email = u.user_email
+		WHERE u.userno
+		= #{userNo}
+		AND u.is_active = 1
+	</select>
+
+	<!-- 사용자 번호로 계좌 조회 -->
+	<select id="findAccountByUserNo" parameterType="int"
+		resultMap="AccountResultMap">
+		SELECT
+		a.account_id,
+		a.user_email,
+		a.account_number,
+		a.balance,
+		a.created_at,
+		a.account_password
+		FROM account a
+		INNER JOIN OWW2.users u ON a.user_email = u.user_email
+		WHERE u.userno = #{userNo}
+		AND u.is_active = 1
+	</select>
+
+</mapper>

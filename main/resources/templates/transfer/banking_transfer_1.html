@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/banking_base}">
+<head>
+<title layout:fragment="title">Own Wedding Wallet</title>
+
+<style layout:fragment="page-styles">
+/* 전체 레이아웃 */
+.main-layout {
+	display: flex;
+	flex-direction: row;
+	gap: 20px;
+	max-width: 1400px;
+	margin: 0 auto;
+	padding: 20px;
+}
+
+/* 사이드바 (왼쪽) */
+.leftnav {
+	width: 260px;
+	flex-shrink: 0; /* 줄어들지 않도록 고정 */
+}
+
+/* 메인 컨텐츠 (오른쪽) */
+.container {
+	flex: 1; /* 나머지 공간 채움 */
+	max-width: 100%;
+	margin: 0; /* 중앙정렬 제거 */
+}
+
+/* 서비스 카드 */
+.service-cards {
+	display: flex;
+	flex-direction: column;
+	gap: 40px;
+	padding: 20px;
+}
+
+.service-card {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background: rgba(255, 255, 255, 0.9);
+	border-radius: 20px;
+	padding: 40px 50px;
+	box-shadow: 0 8px 25px rgba(200, 162, 200, 0.3);
+	cursor: pointer;
+	transition: all 0.3s ease;
+	backdrop-filter: blur(10px);
+	border: 1px solid rgba(255, 255, 255, 0.2);
+	text-align: center;
+	max-width: 600px;
+	margin: 0 auto;
+	
+			width: 100%;
+	max-width: 1000px;   /* 원하시는 최대 크기로 제한 */
+	margin: 0 auto;     /* 가운데 정렬 */
+}
+
+.service-card:hover {
+	transform: translateY(-5px);
+	box-shadow: 0 15px 35px rgba(200, 162, 200, 0.4);
+}
+
+.service-card-center h1 span {
+	color: #6b4c6b;
+	font-size: 36px;
+	font-weight: 700;
+}
+
+.transfer-btn {
+	padding: 14px 28px;
+	border-radius: 25px;
+	background: linear-gradient(135deg, #c8a2c8 0%, #a569a5 100%);
+	color: white;
+	font-weight: 600;
+	border: none;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	box-shadow: 0 4px 15px rgba(165, 105, 165, 0.3);
+}
+
+.transfer-btn:hover {
+	background: linear-gradient(135deg, #a569a5 0%, #8b5a8c 100%);
+	transform: translateY(-2px);
+	box-shadow: 0 6px 20px rgba(139, 90, 140, 0.4);
+}
+
+/* 반응형 */
+@media ( max-width : 768px) {
+	.main-layout {
+		flex-direction: column;
+	}
+	.leftnav {
+		width: 100%;
+	}
+	.container {
+		width: 100%;
+	}
+}
+</style>
+</head>
+
+<body>
+	<main class="site-content" layout:fragment="content">
+		<div class="main-layout">
+
+			<!-- 왼쪽 사이드바 -->
+			<div
+				th:replace="~{fragments/MainSideBar :: sidebar(
+      ${userName}, 
+      ${userEmail}, 
+      ${totalAssets}, 
+      ${safeboxBalance}, 
+      ${goalPercent}, 
+      'Main')}"></div>
+
+
+			<!-- 오른쪽 본문 -->
+			<div class="container">
+				<section class="service-cards">
+					<article class="service-card">
+						<div class="service-card-center">
+							<div class="user-name-line">
+								<span th:text="${userName}">홍길동</span> 님
+							</div>
+							<h2>
+								계좌번호 : <span th:text="${account?.accountNumber ?: '계좌 없음'}">000-0000-00000</span>
+							</h2>
+							<h1>
+								<span class="balance-amount">₩<span
+									th:text="${#numbers.formatInteger(globalAccountBalance, 3, 'COMMA')}">0</span></span>
+							</h1>
+							<button class="transfer-btn" type="button"
+								onclick="location.href='/banking/transfer_2'">이체하기</button>
+						</div>
+					</article>
+				</section>
+			</div>
+		</div>
+	</main>
+
+	<script src="/js/auth-buttons.js"></script>
+</body>
+</html>

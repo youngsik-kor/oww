@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+	<!-- 파라미터: active -->
+	<nav class="site-nav" aria-label="주요 메뉴" th:fragment="siteNav(active)">
+	
+
+		<div class="site-nav__center">
+		
+		
+<div class="site-nav__item">
+  <a th:href="@{/banking/main}" class="site-nav__link"
+     th:classappend="${active}=='banking' ? ' is-active'">
+    <i class='bx bx-wallet'></i>뱅킹서비스</a>
+
+  <div class="site-nav__dropdown">
+    <!-- 메인 -->
+    <a th:href="@{/banking/main}">
+      <i class='bx bx-home'></i>메인
+    </a>
+
+    <!-- 계좌 관리 (계좌 생성 페이지로 연결) -->
+    <a th:href="@{/banking/createAccount}">
+      <i class='bx bx-credit-card'></i>계좌 관리
+    </a>
+
+    <!-- 차곡차곡금고 생성 (Safebox 메인으로 연결) -->
+    <a th:href="@{/banking/safebox/main}">
+      <i class='bx bx-lock'></i>차곡차곡금고 생성
+    </a>
+
+    <!-- 이체 -->
+    <a th:href="@{/banking/transfer_1}">
+      <i class='bx bx-transfer'></i>이체
+    </a>
+
+    <!-- 거래내역 -->
+    <a th:href="@{/banking/history}">
+      <i class='bx bx-history'></i>거래내역
+    </a>
+
+    <div class="site-nav__dropdownFooter">
+      <img th:src="@{/img/wings-diamond.svg}" alt="menu badge" />
+    </div>
+  </div>
+</div>
+
+
+
+
+			<div class="site-nav__item">
+				<a th:href="@{/WeddingPlanner/WeddingPlannerInfo}" class="site-nav__link"
+					th:classappend="${active}=='WeddingPlanner' ? ' is-active'"><i
+					class='bx bx-heart-circle'></i> 웨딩플래너</a>
+				<div class="site-nav__dropdown">
+					<a th:href="@{/WeddingPlanner/WeddingPlannerIntro}">
+					<i class='bx bx-book-open'></i>웨딩플래너 소개</a> 
+					<a th:href="@{/planner/WeddingCategory}">
+					<i class='bx bx-category'></i> 테마별 패키지</a> 
+					<a th:href="@{/planner/WeddingDIY}">
+					<i class='bx bx-wrench'></i> 사용자 DIY</a> 
+					<a th:href="@{/planner/WeddingPlanList}">
+					<i class='bx bx-collection'></i>플랜 보관함</a>
+					<div class="site-nav__dropdownFooter">
+						<img th:src="@{/img/wings-diamond.svg}" alt="menu badge" />
+					</div>
+				</div>
+			</div>
+
+			<div class="site-nav__item">
+				<a th:href="@{#}" class="site-nav__link"
+					th:classappend="${active}=='loan' ? ' is-active'"><i
+					class='bx bx-dollar-circle'></i>대출</a>
+				<div class="site-nav__dropdown">
+					<a th:href="@{#}">
+					<i class='bx bx-book-open'></i>대출상품 소개</a>
+					<a th:href="@{#}">
+					<i class='bx bx-git-compare'></i>상품 비교</a>
+					<a th:href="@{#}">
+					<i class='bx bx-git-compare'></i>대출 상환</a>
+					<a th:href="@{#}">
+					<i class='bx bx-git-compare'></i>생활비•여유자금 계산기</a>
+					<div class="site-nav__dropdownFooter">
+						<img th:src="@{/img/wings-diamond.svg}" alt="menu badge" />
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="user-profile">
+
+			<label for="profileToggle" class="profile-label"> 
+			<img src="/img/profile.png" class="profile-img" /> 
+			<span class="username"> 
+				<a th:href="${@environment.getProperty('app.gateway-base-url')} + ${@environment.getProperty('app.login-path')}"
+					class="btn btn-sm">로그인
+				</a>
+			</span> 
+			<span class="arrow">▼</span>
+			</label>
+
+
+			<!-- 드롭다운: 토글되면 보이게 -->
+			<div class="usernav-item">
+				<a th:href="@{/mypage}" class="dropdown2">마이페이지</a> 
+				<a th:href="@{/budgetSetting}" class="dropdown2">예산 설정</a> 
+				<a th:href="@{/ConsumptionInfo}" class="dropdown2">소비 정보</a> 
+				<a th:href="@{/banking/safebox/main}" class="dropdown2">차곡차곡 금고</a>
+
+			</div>
+		</div>
+	</nav>
+</body>
+</html>

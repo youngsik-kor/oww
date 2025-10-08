@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+layout:decorate="~{layout/base}">
+<head>
+<title layout:fragment="title">계좌 개설 완료 - Own Wedding Wallet</title>
+
+<style layout:fragment="page-styles">
+/* 전체 레이아웃 */
+.main-layout {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* 사이드바 (왼쪽) */
+.leftnav {
+    width: 260px;
+    flex-shrink: 0; /* 줄어들지 않도록 고정 */
+}
+
+/* 메인 컨텐츠 (오른쪽) */
+.container {
+    flex: 1; /* 나머지 공간 채움 */
+    max-width: 100%;
+    margin: 0; /* 중앙정렬 제거 */
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 8px 25px rgba(200, 162, 200, 0.3);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* 성공 페이지 컨텐츠 */
+.success-content {
+    text-align: center;
+    padding: 20px;
+}
+
+.success-icon {
+    font-size: 80px;
+    margin-bottom: 20px;
+    color: #c8a2c8;
+    text-shadow: 0 4px 8px rgba(200, 162, 200, 0.3);
+}
+
+.success-title {
+    font-size: 32px;
+    font-weight: 700;
+    color: #6b4c6b;
+    margin-bottom: 20px;
+    text-shadow: 0 2px 4px rgba(107, 76, 107, 0.1);
+}
+
+.success-message {
+    font-size: 20px;
+    color: #333;
+    margin-bottom: 30px;
+    line-height: 1.6;
+}
+
+.success-message strong {
+    color: #c8a2c8;
+    font-weight: 700;
+}
+
+/* 계좌 정보 박스 */
+.account-info {
+    background: linear-gradient(135deg, #fff 0%, #f8f9ff 100%);
+    border-radius: 16px;
+    padding: 30px;
+    margin: 30px 0;
+    border: 2px solid #c8a2c8;
+    box-shadow: 0 6px 20px rgba(200, 162, 200, 0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+.account-info::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #c8a2c8 0%, #a569a5 50%, #c8a2c8 100%);
+}
+
+.account-label {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 8px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.account-number {
+    font-size: 28px;
+    font-weight: 700;
+    color: #6b4c6b;
+    margin: 15px 0;
+    letter-spacing: 3px;
+    font-family: 'Courier New', monospace;
+    background: linear-gradient(135deg, #6b4c6b 0%, #c8a2c8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.initial-balance {
+    font-size: 16px;
+    color: #666;
+    margin-top: 20px;
+    padding: 12px;
+    background: rgba(200, 162, 200, 0.1);
+    border-radius: 8px;
+    border-left: 4px solid #c8a2c8;
+}
+
+.initial-balance span {
+    color: #c8a2c8;
+    font-weight: 700;
+    font-size: 18px;
+}
+
+/* 안내사항 박스 */
+.info-box {
+    background: linear-gradient(135deg, #fff0f8 0%, #faf5ff 100%);
+    padding: 25px;
+    border-radius: 12px;
+    margin: 30px 0;
+    font-size: 15px;
+    color: #6b4c6b;
+    border-left: 4px solid #c8a2c8;
+    box-shadow: 0 4px 15px rgba(200, 162, 200, 0.1);
+    line-height: 1.8;
+}
+
+.info-box strong {
+    color: #6b4c6b;
+    font-size: 16px;
+    display: block;
+    margin-bottom: 12px;
+}
+
+.info-box ul {
+    margin: 0;
+    padding-left: 0;
+    list-style: none;
+}
+
+.info-box li {
+    margin: 8px 0;
+    padding-left: 20px;
+    position: relative;
+}
+
+.info-box li:before {
+    content: '•';
+    color: #c8a2c8;
+    font-weight: bold;
+    position: absolute;
+    left: 0;
+}
+
+/* 메인 버튼 */
+.main-button {
+    width: 100%;
+    padding: 18px;
+    background: linear-gradient(135deg, #c8a2c8 0%, #a569a5 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 30px;
+    transition: all 0.3s ease;
+    box-shadow: 0 6px 20px rgba(165, 105, 165, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.main-button:hover {
+    background: linear-gradient(135deg, #a569a5 0%, #8b5a8c 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(139, 90, 140, 0.4);
+}
+
+.main-button:active {
+    transform: translateY(-1px);
+}
+
+/* 축하 애니메이션 */
+@keyframes celebration {
+    0% { transform: scale(0.8); opacity: 0; }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.success-content {
+    animation: celebration 0.8s ease-out;
+}
+
+/* 반짝이는 효과 */
+@keyframes sparkle {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+.success-icon {
+    animation: sparkle 2s ease-in-out infinite;
+}
+
+/* 반응형 */
+@media (max-width: 768px) {
+    .main-layout {
+        flex-direction: column;
+        padding: 10px;
+    }
+    .leftnav {
+        width: 100%;
+    }
+    .container {
+        width: 100%;
+        padding: 20px;
+    }
+    
+    .success-title {
+        font-size: 24px;
+    }
+    
+    .success-message {
+        font-size: 18px;
+    }
+    
+    .account-number {
+        font-size: 22px;
+        letter-spacing: 2px;
+    }
+    
+    .success-icon {
+        font-size: 60px;
+    }
+}
+</style>
+</head>
+
+<body>
+<main class="site-content" layout:fragment="content">
+<div class="main-layout">
+
+    <!-- 왼쪽 사이드바 -->
+    <div th:replace="~{fragments/MainSideBar :: sidebar(
+        ${userName},
+        ${userEmail},
+        ${totalAssets},
+        ${safeboxBalance},
+        ${goalPercent},
+        'CreateAccount')}"></div>
+
+    <!-- 오른쪽 본문 -->
+    <div class="container">
+        <article class="section">
+            <div class="success-content">
+                
+                <h2 class="success-title">축하합니다!</h2>
+
+                <div class="success-message">
+                    <strong th:text="${userName ?: '고객'}">고객</strong>님의<br> 
+                    계좌가 성공적으로 개설되었습니다!
+                </div>
+
+                <div class="account-info">
+                    <div class="account-label">새로 개설된 계좌번호</div>
+                    <div class="account-number" 
+                         th:text="${newAccount?.accountNumber ?: '계좌번호를 불러올 수 없습니다'}">
+                        110-000000-001
+                    </div>
+                    <div class="initial-balance">
+                        초기 잔액: <span>0원</span>
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <strong>안내사항</strong>
+                    <ul>
+                        <li>계좌번호와 비밀번호는 안전하게 보관해주세요</li>
+                        <li>이체 및 입출금은 뱅킹 메인에서 이용 가능합니다</li>
+                        <li>문의사항은 고객센터로 연락해주세요</li>
+                    </ul>
+                </div>
+
+                <button class="main-button" onclick="location.href='/banking/main'">
+                    뱅킹 메인으로 가기
+                </button>
+            </div>
+        </article>
+    </div>
+</div>
+</main>
+
+<script src="/js/auth-buttons.js"></script>
+</body>
+</html>

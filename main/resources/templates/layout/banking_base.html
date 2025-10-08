@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title layout:fragment="title">OWW Banking</title>
+    
+    <meta name="user-email-hash" th:content="${userEmailHash}">
+
+
+    <!-- 필수 공통 CSS들 추가 -->
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <link th:href="@{/css/icons.css}" rel="stylesheet">
+    <link th:href="@{/css/MainSideBar.css}" rel="stylesheet">
+
+    <!-- 새로운 헤더 디자인 CSS (마지막에 로드해서 우선순위 확보) -->
+    <link th:href="@{/css/design.css}" rel="stylesheet" />
+    
+    <!-- 외부 라이브러리 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles@2/tsparticles.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" defer></script>
+    
+    <style layout:fragment="page-styles"></style>
+</head>
+
+<body class="site-layout">
+    <header th:replace="~{fragments/header :: siteHeader(active=${active})}"></header>
+    <nav th:replace="~{fragments/nav :: siteNav(active=${active})}"></nav>
+    
+    <main class="site-content" layout:fragment="content"></main>
+    
+    <footer th:replace="~{fragments/footer :: siteFooter}"></footer>
+    <div layout:fragment="scripts"></div>
+</body>
+</html>

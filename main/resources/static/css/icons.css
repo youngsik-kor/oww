@@ -1,0 +1,63 @@
+/* 공통 아이콘 유틸리티: 모든 화면에서 재사용 */
+.icon {
+	display: inline-flex;
+	align-items: center;
+	line-height: 1;
+	font-size: 1.1em;
+}
+
+.icon-box {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 32px;
+	height: 32px;
+	border-radius: 12px;
+	border: 1px solid var(--line, #e5e7eb);
+	background: var(--card, #fff);
+	box-shadow: 0 4px 10px rgba(17, 24, 39, .04);
+}
+
+.icon-box i {
+	font-size: 18px;
+	color: var(--ink, #111827);
+}
+
+/* 크기 변형 */
+.icon-box.--sm {
+	width: 28px;
+	height: 28px;
+	border-radius: 10px;
+}
+
+.icon-box.--lg {
+	width: 40px;
+	height: 40px;
+	border-radius: 14px;
+}
+
+.icon-box.--xl {
+	width: 48px;
+	height: 48px;
+	border-radius: 16px;
+}
+
+/* 색 변형 (브랜드톤) */
+.icon-box.brand {
+	background: var(--brand-weak, #f3e8ff);
+	border-color: #e9d5ff;
+}
+
+.icon-box.brand i {
+	color: var(--brand, #7c3aed);
+}
+
+/* 버튼 내부 아이콘 간격 */
+.btn i.bx, .btn-m i.bx, .btn-s i.bx {
+	margin-right: 6px;
+}
+
+/* 섹션 타이틀 좌측 아이콘용 간격 */
+.section-title i.bx {
+	margin-right: 8px;
+}

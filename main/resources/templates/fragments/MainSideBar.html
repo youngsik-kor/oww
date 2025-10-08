@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<!-- Banking 페이지 호출부와 동일하게 6개의 인자 받도록 수정 -->
+<div th:fragment="sidebar(userName, userEmail, totalAssets, safeboxBalance, goalPercent, activePage)">
+  <aside class="leftnav" aria-label="웨딩플래너 사이드바">
+    <!-- 상단 사용자 박스 -->
+    <div class="ln-header">
+      <div class="icon-box brand --xl" title="User"><i class='bx bx-user-circle'></i></div>
+      <div class="ln-user">
+        <div class="ln-hello"
+             th:text="${userName != null ? userName + ' 님' : '반가워요!'}">반가워요!</div>
+        <div class="ln-mail"
+             th:text="${userEmail != null ? userEmail : ''}"></div>
+      </div>
+    </div>
+
+    <!-- 요약 (Banking 서비스용 KPI: 자산, 금고 등) -->
+    <div class="ln-summary">
+      <div class="ln-kpi">
+        <div class="kpi">
+          <span class="icon-box --sm brand"><i class='bx bx-wallet'></i></span>
+          <span class="t">총 자산</span>
+          <span class="v" th:text="${totalAssets != null ? #numbers.formatInteger(totalAssets, 3, 'COMMA') : 0}">0</span>
+        </div>
+        <div class="kpi">
+          <span class="icon-box --sm brand"><i class='bx bx-lock'></i></span>
+          <span class="t">금고 잔액</span>
+          <span class="v" th:text="${safeboxBalance != null ? #numbers.formatInteger(safeboxBalance, 3, 'COMMA') : 0}">0</span>
+        </div>
+        <div class="kpi">
+          <span class="icon-box --sm brand"><i class='bx bx-bullseye'></i></span>
+          <span class="t">목표 달성률</span>
+          <span class="v" th:text="${goalPercent != null ? goalPercent : 0}">0</span>%
+        </div>
+      </div>
+    </div>
+
+    <!-- 내비게이션 -->
+    <div class="ln-title" style="margin-top:10px;">뱅킹 메뉴</div>
+    <nav class="ln-list">
+      <a class="ln-item"
+         th:classappend="${#strings.containsIgnoreCase(activePage,'Main')}? ' active' : ''"
+         th:href="@{/banking/main}">
+        <i class='bx bx-home-heart'></i><span>메인</span>
+      </a>
+      <a class="ln-item"
+         th:classappend="${#strings.containsIgnoreCase(activePage,'Transfer')}? ' active' : ''"
+         th:href="@{/banking/transfer_1}">
+        <i class='bx bx-transfer'></i><span>이체</span>
+      </a>
+      <a class="ln-item"
+         th:classappend="${#strings.containsIgnoreCase(activePage,'Safebox')}? ' active' : ''"
+         th:href="@{/banking/safebox/main}">
+        <i class='bx bx-lock-alt'></i><span>차곡차곡 금고</span>
+      </a>
+      <a class="ln-item"
+         th:classappend="${#strings.containsIgnoreCase(activePage,'History')}? ' active' : ''"
+         th:href="@{/banking/history}">
+        <i class='bx bx-list-ul'></i><span>거래 내역</span>
+      </a>
+    </nav>
+
+    <!-- 도움말 -->
+    <div class="ln-help">
+      <div class="icon-box --sm"><i class='bx bx-info-circle'></i></div>
+      <div class="t">로그인 후 뱅킹 서비스를 이용하실 수 있습니다.</div>
+    </div>
+  </aside>
+</div>
+</body>
+</html>

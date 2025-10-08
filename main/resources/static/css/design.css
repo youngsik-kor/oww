@@ -1,0 +1,360 @@
+/* ================= 공통/레이아웃 ================= */
+html, body {
+  height: 100%;
+}
+
+body.site-layout {
+  margin: 0;
+  padding: 0;
+  background-color: #ffffff;
+  color: #5a3a36;
+  scroll-behavior: smooth;
+  position: relative;
+  min-height: 150vh;            /* 한 화면 높이 보장 */
+  display: flex;                /* 컬럼 플렉스 레이아웃 */
+  flex-direction: column;
+  overflow: visible;
+}
+
+/* 본문이 남은 공간을 채움 → footer가 항상 맨 아래 */
+main.site-content,
+section.site-content,
+div.site-content {
+  flex: 1 0 auto;
+  min-height: 0;
+}
+
+.site-header, .site-nav, .site-content, .site-footer {
+  position: relative;
+  z-index: 1;
+}
+
+/* ================= Header ================= */
+.site-header {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 40px 10px;
+  background: linear-gradient(-45deg, #FFF7F9, #FFFFFF);
+  background-size: 400% 400%;
+  animation: gradientMove 12s ease infinite;
+  height: 150px;
+}
+
+@keyframes gradientMove {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* .site-header .brand .logo {
+  position: absolute;
+  left: 2%;
+  transform: translateY(-55%);
+  font-size: 28px;
+  margin: 0;
+  width: 250px;
+  height: 250px;
+} */
+
+.site-header .brand .logo {
+  position: absolute;
+  left: 50%;              /* 화면 가로 중앙으로 위치 */
+  top: 60%;               /* 화면 세로 중앙으로 위치 (필요 시) */
+  transform: translate(-50%, -55%); /* X축 중앙 보정, Y축은 기존처럼 -55% */
+  font-size: 28px;
+  margin: 0;
+  width: 250px;
+  height: 250px;
+}
+
+
+.site-header #header-particles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 180px;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.site-header #tsparticles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 200px;
+  z-index: 0;
+  pointer-events: none;
+}
+
+
+/* ================= Nav ================= */
+.site-nav {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr; /* 좌-중앙-우 */
+  justify-content: space-between;      /* 좌우 정렬 */
+  align-items: center;
+  padding: 0 40px;
+  background-color: #f472b6;
+  height: 60px;
+  min-height: 60px;
+  box-sizing: border-box;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  overflow: visible;
+  margin-top: 0;
+}
+
+@keyframes slideDownFade {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* 기존: .nav-container, .nav-link → 스코프/이름만 */
+.site-nav__container, .site-nav__link {
+  position: relative;
+  z-index: 1;
+}
+
+/* 중앙 메뉴 (기존 .nav-center) */
+.site-nav__center {
+  position: static;        /* absolute 해제 */
+  left: auto; top: auto;
+  transform: none;         /* 중앙 이동값 해제 */
+  grid-column: 2;          /* 가운데 칼럼 */
+  margin: 0 auto;          /* 넓이 변화 시도 중앙 유지 */
+  display: flex;
+  gap: 40px;
+  z-index: 2;
+}
+
+/* 좌측 영역 필요 시 (기존 .nav-left) */
+.site-nav__left, .site-nav .nav-left {
+  display: flex;
+  gap: 40px;
+}
+
+/* 사용자 프로필(기존 .user-profile) */
+.site-nav .user-profile {
+  position: relative;
+  margin-left: 0;
+  display: flex;
+  align-items: center;
+  grid-column: 3;
+  justify-self: end;
+  gap: 6px;
+}
+
+/* 아이템/링크 (기존 .nav-item / .nav-link) */
+.site-nav__item { position: relative; }
+
+.site-nav__link {
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 16px;
+  line-height: 60px;
+  padding-top: 0;
+  padding-bottom: 0;
+  display: inline-block;
+  transition: all 0.3s ease;
+  font-weight: bold;
+}
+
+.site-nav__link:hover {
+  /* background-color: #ffe5e1; */
+  color: #7c3aed;
+}
+
+/* 드롭다운(기존 .dropdown) */
+.site-nav__dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #ffffff;
+  display: none;
+  flex-direction: column;
+  min-width: 160px;
+  border: 1px solid #F1CBE5;
+  z-index: 999;
+  width: 220px;
+  min-width: 220px;
+  min-height: 350px;
+  max-height: 72vh;
+  box-sizing: border-box;
+  padding: 6px 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.site-nav__item:hover .site-nav__dropdown { display: flex; }
+
+/* 드롭다운 중앙 정렬(기존 .nav-item .dropdown 중앙정렬) */
+.site-nav__item .site-nav__dropdown {
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  transform-origin: top center;
+}
+
+/* 드롭다운 항목(기존 .dropdown a) */
+.site-nav__dropdown a {
+  display: block;
+  text-align: center;
+  padding: 10px 15px;
+  white-space: nowrap;
+  color: #f472b6;
+  text-decoration: none;
+  font-size: 15px;
+  /* 라인 높이 통일(기존 값 유지) */
+  height: 38px;
+  line-height: 38px;
+}
+
+.site-nav__dropdown a:hover {
+  /* background-color: #ffe5e1; */
+  color: #c4b5fd;
+}
+
+/* 드롭다운 하단 영역(기존 .dropdown-footer) */
+.site-nav__dropdownFooter {
+  margin-top: auto;
+  position: sticky;
+  bottom: 0;
+  background: #fff;
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  z-index: 1;
+}
+
+.site-nav__dropdownFooter img, .site-nav__dropdownFooter svg { display: block; }
+
+/* 프로필 드롭다운/라벨/화살표 */
+.site-nav .profile-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.site-nav .arrow {
+  cursor: pointer;
+  font-size: 12px;
+  color: #444;
+  transition: transform 0.2s ease;
+  padding: 4px;
+}
+
+.site-nav .user-profile:hover .arrow,
+.site-nav .user-profile:focus-within .arrow {
+  transform: rotate(180deg);
+}
+
+.site-nav .user-profile:hover .usernav-item,
+.site-nav .user-profile:focus-within .usernav-item {
+  display: flex;
+}
+
+.site-nav .usernav-item {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  display: none;
+  background-color: #ffffff;
+  border: 1px solid #F1CBE5;
+  min-width: 160px;
+  padding: 0;
+  border-radius: 0;
+  box-shadow: none;
+  flex-direction: column;
+  z-index: 1001;
+}
+
+.site-nav .usernav-item a {
+  display: block;
+  text-align: center;
+  padding: 10px 15px;
+  white-space: nowrap;
+}
+
+.site-nav .dropdown2 {
+  display: block;
+  padding: 10px 15px;
+  text-decoration: none;
+  color: #C8A2C8;
+  white-space: nowrap;
+  font-size: 15px;
+  font-weight: normal;
+}
+
+.site-nav .dropdown2:hover {
+  background-color: #ffe5e1;
+  color: #c4b5fd;
+  border-radius: 0;
+}
+
+
+/* ================= content ================= */
+
+
+
+/* ================= Footer ================= */
+.site-footer {
+  background-color: #f8f3f8;
+  text-align: center;
+  color: #4A4A4A;
+  font-size: 14px;
+  padding: 30px 20px;
+  font-family: 'Noto Sans KR', sans-serif;
+  border-top: 1px solid #e0d9e7;
+  margin-top: auto;            /* ← 항상 하단 고정 */
+}
+
+.site-footer__inner, .footer-container { /* 구 HTML 호환 */
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.site-footer__sec, .footer-section { flex: 1 1 300px; }
+
+.site-footer__sec h5, .footer-section h5 {
+  margin-bottom: 10px;
+  font-weight: bold;
+  color: #333;
+}
+
+.footer-text { color: #4A4A4A; margin: 4px 0; }
+
+.footer-link {
+  color: #9966cc;
+  text-decoration: none;
+  display: inline-block;
+  margin: 4px 0;
+}
+
+.footer-link:hover { text-decoration: underline; }
+
+.site-footer__linkHeading, .footer-link-heading {
+  color: #333;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.site-footer__linkHeading:hover, .footer-link-heading:hover { text-decoration: underline; }
+
+.site-footer__bottom, .footer-bottom {
+  text-align: center;
+  margin-top: 20px;
+  color: #aaa;
+}

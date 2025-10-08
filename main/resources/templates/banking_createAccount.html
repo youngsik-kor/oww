@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+layout:decorate="~{layout/base}">
+<head>
+<title layout:fragment="title">계좌 개설 - Own Wedding Wallet</title>
+
+<style layout:fragment="page-styles">
+/* 전체 레이아웃 */
+.main-layout {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* 사이드바 (왼쪽) */
+.leftnav {
+    width: 260px;
+    flex-shrink: 0; /* 줄어들지 않도록 고정 */
+}
+
+/* 메인 컨텐츠 (오른쪽) */
+.container {
+    flex: 1; /* 나머지 공간 채움 */
+    max-width: 100%; max-width: 600px;    
+    margin: 0 auto;  
+
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 8px 25px rgba(200, 162, 200, 0.3);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* 계좌 개설 폼 스타일 */
+.container h2 {
+    color: #6b4c6b;
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.section {
+    margin-bottom: 20px;
+}
+
+.section label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #333;
+}
+
+.section input[type="text"],
+.section input[type="email"] {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+    box-sizing: border-box;
+}
+
+.section input[type="text"]:focus,
+.section input[type="email"]:focus {
+    outline: none;
+    border-color: #c8a2c8;
+    box-shadow: 0 0 0 3px rgba(200, 162, 200, 0.1);
+}
+
+.section button {
+    padding: 12px 24px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #c8a2c8 0%, #a569a5 100%);
+    color: white;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(165, 105, 165, 0.3);
+    font-size: 14px;
+}
+
+.section button:hover {
+    background: linear-gradient(135deg, #a569a5 0%, #8b5a8c 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(139, 90, 140, 0.4);
+}
+
+.section button:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* 비밀번호 키패드 */
+.password-box {
+    cursor: pointer;
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    text-align: center;
+    user-select: none;
+    background: white;
+    font-size: 18px;
+    letter-spacing: 4px;
+    transition: border-color 0.3s ease;
+}
+
+.password-box:hover,
+.password-box:focus {
+    border-color: #c8a2c8;
+    outline: none;
+}
+
+.keypad {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.keypad button {
+    padding: 15px;
+    font-size: 18px;
+    font-weight: 600;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border: 1px solid #dee2e6;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.keypad button:hover {
+    background: linear-gradient(135deg, #c8a2c8 0%, #a569a5 100%);
+    color: white;
+    transform: translateY(-1px);
+}
+
+.keypad button:active {
+    transform: translateY(0);
+}
+
+/* 제출 버튼 */
+.submit-btn {
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(135deg, #c8a2c8 0%, #a569a5 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: 700;
+    transition: all 0.3s ease;
+    box-shadow: 0 6px 20px rgba(165, 105, 165, 0.3);
+}
+
+.submit-btn:hover {
+    background: linear-gradient(135deg, #a569a5 0%, #8b5a8c 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(139, 90, 140, 0.4);
+}
+
+.submit-btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* 약관 체크박스 */
+.terms-inline {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.terms-inline input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    margin-right: 4px;
+}
+
+.terms-link {
+    color: #c8a2c8;
+    text-decoration: none;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.terms-link:hover {
+    color: #a569a5;
+    text-decoration: underline;
+}
+
+/* 모달 스타일 */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.5);
+    justify-content: center; align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 600px;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.close {
+    float: right;
+    font-size: 28px;
+    cursor: pointer;
+    color: #aaa;
+    line-height: 1;
+}
+
+.close:hover {
+    color: #000;
+}
+
+.modal-content h3 {
+    color: #6b4c6b;
+    margin-bottom: 20px;
+}
+
+.modal-content h4 {
+    color: #333;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+.modal-content ul {
+    margin-left: 20px;
+}
+
+/* 이메일 인증 섹션 */
+#emailVerifySection input {
+    margin-bottom: 8px;
+}
+
+/* 반응형 */
+@media (max-width: 768px) {
+    .main-layout {
+        flex-direction: column;
+        padding: 10px;
+    }
+    .leftnav {
+        width: 100%;
+    }
+    .container {
+        width: 100%;
+        padding: 20px;
+    }
+    
+    .keypad {
+        gap: 6px;
+    }
+    
+    .keypad button {
+        padding: 12px;
+        font-size: 16px;
+    }
+}
+</style>
+</head>
+
+<body>
+<!-- 이미 계좌가 존재하는 경우 알림 처리 -->
+<script th:if="${hasExistingAccount}">
+    alert('이미 계좌가 존재합니다.');
+    window.location.href = '/banking/main';
+</script>
+
+<main class="site-content" layout:fragment="content">
+<div class="main-layout">
+
+    <!-- 왼쪽 사이드바 -->
+    <div th:replace="~{fragments/MainSideBar :: sidebar(
+        ${userName},
+        ${userEmail},
+        ${totalAssets},
+        ${safeboxBalance},
+        ${goalPercent},
+        'CreateAccount')}"></div>
+
+    <!-- 오른쪽 본문 -->
+    <div class="container">
+        <form action="/banking/account/create" method="post" onsubmit="return submitForm()">
+            <h2>계좌 개설</h2>
+
+            <article class="section">
+                <label for="name">이름</label>
+                <input type="text" id="name" name="name" placeholder="홍길동" autocomplete="name" required />
+            </article>
+
+            <article class="section">
+                <label for="email">이메일 주소</label>
+                <input type="email" id="email" name="email" placeholder="example@email.com" autocomplete="email" required />
+            </article>
+
+            <article class="section">
+                <button type="button" onclick="sendEmailVerification(event)" style="width: 100%;">인증 이메일 발송</button>
+            </article>
+
+            <article class="section" id="emailVerifySection" style="display: none;">
+                <label for="emailCode">인증번호 입력</label>
+                <input type="text" id="emailCode" name="emailCode" placeholder="6자리 입력" maxlength="6" />
+                <button type="button" onclick="verifyEmailCode(event)" style="margin-top: 8px; width: 100%;">✅ 인증 확인</button>
+            </article>
+
+            <article class="section">
+                <label for="passwordInput">계좌 비밀번호 (숫자 4자리)</label>
+                <div id="passwordDisplay" class="password-box" tabindex="0" aria-label="계좌 비밀번호 입력창" role="textbox" aria-readonly="true" onclick="showKeypad()">● ● ● ●</div>
+                <input type="hidden" id="passwordInput" name="password" maxlength="4" required />
+                <div class="keypad" id="keypad" aria-label="숫자 키패드" style="display: none;">
+                    <button type="button" onclick="addNumber('1')">1</button>
+                    <button type="button" onclick="addNumber('2')">2</button>
+                    <button type="button" onclick="addNumber('3')">3</button>
+                    <button type="button" onclick="addNumber('4')">4</button>
+                    <button type="button" onclick="addNumber('5')">5</button>
+                    <button type="button" onclick="addNumber('6')">6</button>
+                    <button type="button" onclick="addNumber('7')">7</button>
+                    <button type="button" onclick="addNumber('8')">8</button>
+                    <button type="button" onclick="addNumber('9')">9</button>
+                    <button type="button" onclick="hideKeypad()">취소</button>
+                    <button type="button" onclick="addNumber('0')">0</button>
+                    <button type="button" onclick="removeNumber()">삭제</button>
+                </div>
+            </article>
+
+            <article class="section">
+                <div class="terms-inline">
+                    <input type="checkbox" id="agree" name="agree" required />
+                    <label for="agree">약관에 동의합니다.</label>
+                    <a href="#" onclick="openModal(event)" class="terms-link">[약관 보기]</a>
+                </div>
+            </article>
+
+            <article class="section">
+                <button class="submit-btn" type="submit">계좌 개설하기</button>
+            </article>
+        </form>
+    </div>
+</div>
+
+<!-- 약관 모달 -->
+<div id="termsModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-describedby="modalDesc">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()" aria-label="모달 닫기">&times;</span>
+        <h3 id="modalTitle">계좌 개설 약관</h3>
+        <div id="modalDesc">
+            <p>본인은 계좌 개설에 필요한 모든 정보를 사실대로 제공하였으며, 아래 약관을 충분히 이해하고 동의합니다. 본 약관은 전자금융거래법, 개인정보 보호법 등 관련 법령에 따라 Own Wedding Wallet 계좌 서비스 이용에 적용됩니다.</p>
+
+            <h4>제1조 (목적)</h4>
+            <p>본 약관은 이용자가 Own Wedding Wallet 계좌를 개설하고 서비스를 이용함에 있어 필요한 권리, 의무, 책임 사항을 규정함을 목적으로 합니다.</p>
+
+            <h4>제2조 (개인정보의 수집 및 이용)</h4>
+            <p>계좌 개설 및 서비스 제공을 위해 필요한 최소한의 개인정보를 수집하며, 수집된 정보는 아래 목적에 한해 이용됩니다.</p>
+            <ul>
+                <li>계좌 개설 및 본인 인증</li>
+                <li>전자금융거래 서비스 제공 및 관리</li>
+                <li>법령상 요구되는 기록 보관 및 보고</li>
+                <li>이용자 문의 및 민원 처리</li>
+            </ul>
+            <p>모든 개인정보는 관련 법령에 따라 안전하게 보호되며, 무단 제3자 제공은 금지됩니다.</p>
+
+            <h4>제3조 (계좌 이용 및 제한)</h4>
+            <p>계좌는 본인 확인 절차 완료 후 이용 가능합니다. 계좌 이용 시 아래 사항을 준수해야 합니다.</p>
+            <ul>
+                <li>타인에게 계좌 비밀번호를 제공하지 않아야 합니다.</li>
+                <li>부정한 목적의 거래, 불법 행위와 관련된 거래를 해서는 안 됩니다.</li>
+                <li>계좌 이상 거래 발생 시 즉시 고객센터에 신고해야 합니다.</li>
+            </ul>
+            <p>계좌 해지 시에는 서비스 정책 및 관련 법령에 따라 처리됩니다.</p>
+
+            <h4>제4조 (비밀번호 및 보안)</h4>
+            <p>이용자는 계좌 비밀번호를 안전하게 관리해야 하며, 분실 또는 유출 시 즉시 변경하거나 신고해야 합니다. Own Wedding Wallet은 이용자의 부주의로 인한 피해에 대해 법적 책임을 지지 않을 수 있습니다.</p>
+
+            <h4>제5조 (서비스 변경 및 중단)</h4>
+            <p>Own Wedding Wallet은 서비스 개선, 시스템 유지보수, 법령 준수를 위해 사전 고지 후 계좌 서비스의 일부 또는 전체를 변경하거나 일시 중단할 수 있습니다.</p>
+
+            <h4>제6조 (면책 및 책임 제한)</h4>
+            <p>천재지변, 시스템 장애, 해킹 등 불가항력적 사유로 발생한 손해에 대해 회사는 책임을 지지 않으며, 이용자는 이를 충분히 이해하고 동의합니다.</p>
+
+            <h4>제7조 (분쟁 해결)</h4>
+            <p>본 약관과 관련된 분쟁은 회사 소재지를 관할하는 법원을 1차 관할 법원으로 합니다. 약관 미숙지에 따른 문제는 이용자 책임입니다.</p>
+
+            <p>위 약관을 모두 이해하고 동의하며, 계좌 개설을 진행합니다.</p>
+        </div>
+    </div>
+</div>
+</main>
+<script layout:fragment="scripts" th:src="@{/js/createAccount.js}"></script>
+
+</body>
+</html>

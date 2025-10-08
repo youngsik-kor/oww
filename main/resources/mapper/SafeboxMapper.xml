@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="oww.banking.mapper.SafeboxMapper">
+
+	<!-- SafeboxVO ResultMap -->
+	<resultMap id="SafeboxResultMap"
+		type="oww.banking.vo.SafeboxVO">
+		<id property="safeboxId" column="safebox_id" />
+		<result property="userEmail" column="user_email" />
+		<result property="balance" column="balance" />
+		<result property="createdAt" column="created_at"
+			javaType="java.time.LocalDateTime" />
+	</resultMap>
+
+	<!-- SafeboxGoalVO ResultMap -->
+	<resultMap id="SafeboxGoalResultMap"
+		type="oww.banking.vo.SafeboxGoalVO">
+		<id property="goalId" column="goal_id" />
+		<result property="safeboxId" column="safebox_id" />
+		<result property="title" column="title" />
+		<result property="targetAmount" column="target_amount" />
+		<result property="startDate" column="start_date"
+			javaType="java.time.LocalDate" />
+		<result property="endDate" column="end_date"
+			javaType="java.time.LocalDate" />
+		<result property="paymentType" column="payment_type" />
+		<result property="createdAt" column="created_at"
+			javaType="java.time.LocalDateTime" />
+	</resultMap>
+
+	<!-- SafeboxHistoryVO ResultMap -->
+	<resultMap id="SafeboxHistoryResultMap"
+		type="oww.banking.vo.SafeboxHistoryVO">
+		<id property="paymentId" column="payment_id" />
+		<result property="goalId" column="goal_id" />
+		<result property="amount" column="amount" />
+		<result property="paymentDate" column="payment_date"
+			javaType="java.time.LocalDate" />
+	</resultMap>
+
+	<!-- 세이프박스 생성 -->
+	<insert id="createSafebox"
+		parameterType="oww.banking.vo.SafeboxVO">
+		<selectKey keyProperty="safeboxId" resultType="int"
+			order="BEFORE">
+			SELECT SAFEBOX_SEQ.NEXTVAL FROM DUAL
+		</selectKey>
+		INSERT INTO safebox (
+		safebox_id,
+		user_email,
+		balance,
+		created_at
+		) VALUES
+		(
+		#{safeboxId},
+		#{userEmail},
+		#{balance},
+		CURRENT_TIMESTAMP
+		)
+	</insert>
+
+	<!-- 이메일로 세이프박스 조회 -->
+	<select id="findSafeboxByEmailHash" parameterType="String"
+		resultMap="SafeboxResultMap">
+		SELECT s.safebox_id, s.user_email, s.balance, s.created_at
+		FROM safebox s
+		INNER JOIN OWW2.users u ON s.user_email = u.user_email
+		WHERE u.user_email_hash = #{emailHash, jdbcType=VARCHAR}
+	</select>
+
+
+	<!-- 세이프박스 잔액 업데이트 -->
+	<update id="updateSafeboxBalance" parameterType="map">
+		UPDATE safebox
+		SET balance = #{balance}
+		WHERE safebox_id = #{safeboxId}
+	</update>
+
+	<!-- 이메일로 세이프박스 존재 여부 확인 -->
+	<select id="existsByEmailHash" parameterType="String"
+		resultType="int">
+		SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END
+		FROM safebox s
+		INNER JOIN OWW2.users u ON s.user_email = u.user_email
+		WHERE u.user_email_hash = #{emailHash, jdbcType=VARCHAR}
+	</select>
+
+
+	<!-- 정기저금 목표 생성 -->
+	<insert id="createSafeboxGoal"
+		parameterType="oww.banking.vo.SafeboxGoalVO">
+		<selectKey keyProperty="goalId" resultType="int"
+			order="BEFORE">
+			SELECT SAFEBOX_GOAL_SEQ.NEXTVAL FROM DUAL
+		</selectKey>
+		INSERT INTO safebox_goal (
+		goal_id,
+		safebox_id,
+		title,
+		target_amount,
+		start_date,
+		end_date,
+		payment_type,
+		created_at
+		) VALUES (
+		#{goalId},
+		#{safeboxId},
+		#{title},
+		#{targetAmount},
+		#{startDate},
+		#{endDate},
+		#{paymentType},
+		CURRENT_TIMESTAMP
+		)
+	</insert>
+
+	<!-- 세이프박스 ID로 목표 조회 -->
+	<select id="findGoalsBySafeboxId" parameterType="int"
+		resultMap="SafeboxGoalResultMap">
+		SELECT
+		goal_id,
+		safebox_id,
+		title,
+		target_amount,
+		start_date,
+		end_date,
+		payment_type,
+		created_at
+		FROM safebox_goal
+		WHERE safebox_id =
+		#{safeboxId}
+		ORDER BY created_at DESC
+	</select>
+
+	<!-- 목표 ID로 목표 조회 -->
+	<select id="findGoalById" parameterType="int"
+		resultMap="SafeboxGoalResultMap">
+		SELECT
+		goal_id,
+		safebox_id,
+		title,
+		target_amount,
+		start_date,
+		end_date,
+		payment_type,
+		created_at
+		FROM safebox_goal
+		WHERE goal_id =
+		#{goalId}
+	</select>
+
+	<!-- 저축 내역 생성 -->
+	<insert id="createSafeboxHistory"
+		parameterType="oww.banking.vo.SafeboxHistoryVO">
+		<selectKey keyProperty="paymentId" resultType="int"
+			order="BEFORE">
+			SELECT SAFEBOX_HISTORY_SEQ.NEXTVAL FROM DUAL
+		</selectKey>
+		INSERT INTO safebox_history (
+		payment_id,
+		goal_id,
+		amount,
+		payment_date
+		)
+		VALUES (
+		#{paymentId},
+		#{goalId},
+		#{amount},
+		#{paymentDate}
+		)
+	</insert>
+
+	<!-- 목표별 저축 내역 조회 -->
+	<select id="findHistoryByGoalId" parameterType="int"
+		resultMap="SafeboxHistoryResultMap">
+		SELECT
+		payment_id,
+		goal_id,
+		amount,
+		payment_date
+		FROM
+		safebox_history
+		WHERE goal_id = #{goalId}
+		ORDER BY payment_date DESC
+	</select>
+
+	<!-- 목표별 총 저축 금액 조회 -->
+	<select id="getTotalSavedAmountByGoalId" parameterType="int"
+		resultType="java.math.BigDecimal">
+		SELECT COALESCE(SUM(amount), 0)
+		FROM safebox_history
+		WHERE
+		goal_id = #{goalId}
+	</select>
+
+	<select id="findHistoryByUserEmailHash" parameterType="String"
+    resultMap="SafeboxHistoryResultMap">
+    SELECT h.payment_id, h.goal_id, h.amount, h.payment_date
+    FROM safebox_history h
+    INNER JOIN safebox_goal g ON h.goal_id = g.goal_id
+    INNER JOIN safebox s ON g.safebox_id = s.safebox_id
+    INNER JOIN OWW2.users u ON s.user_email = u.user_email
+    WHERE u.user_email_hash = #{emailHash, jdbcType=VARCHAR}
+    ORDER BY h.payment_date DESC
+</select>
+
+
+	<!-- 세이프박스 ID로 세이프박스 조회 -->
+	<select id="findSafeboxBySafeboxId" parameterType="int"
+		resultMap="SafeboxResultMap">
+		SELECT
+		safebox_id,
+		user_email,
+		balance,
+		created_at
+		FROM safebox
+		WHERE safebox_id = #{safeboxId}
+	</select>
+
+</mapper>

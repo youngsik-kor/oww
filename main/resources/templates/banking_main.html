@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/banking_base}">
+<head>
+<title layout:fragment="title">Own Wedding Wallet | 뱅킹서비스</title>
+
+<!-- 페이지 전용 CSS -->
+<style layout:fragment="page-styles">
+.main-layout {
+	display: flex;
+	flex-direction: row;
+	min-height: 80vh;
+	gap: 20px;
+	padding: 20px;
+}
+
+.leftnav {
+	flex: 0 0 250px;
+	background: rgba(255, 255, 255, 0.95);
+	border-radius: 15px;
+	padding: 20px;
+	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+}
+
+.ln-header {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+.ln-user {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+}
+
+.ln-hello {
+	font-weight: 800;
+}
+
+.ln-mail {
+	font-size: 12px;
+	color: #6b7280;
+}
+
+.icon-box {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 32px;
+	height: 32px;
+	border-radius: 12px;
+	border: 1px solid #e5e7eb;
+	background: #fff;
+	box-shadow: 0 4px 10px rgba(17, 24, 39, .04);
+}
+
+.icon-box.--xl {
+	width: 48px;
+	height: 48px;
+	border-radius: 16px;
+}
+
+.icon-box.brand {
+	background: #f3e8ff;
+	border-color: #e9d5ff;
+}
+
+.container {
+	flex: 1;
+	max-width: none;
+}
+
+.service-cards {
+	display: flex;
+	flex-direction: column;
+	gap: 40px;
+	padding: 20px;
+}
+
+.service-card {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	background: rgba(255, 255, 255, 0.9);
+	border-radius: 20px;
+	padding: 32px 40px;
+	box-shadow: 0 8px 25px rgba(200, 162, 200, 0.3);
+	transition: all 0.3s ease;
+	border: 1px solid rgba(255, 255, 255, 0.2);
+	width: 100%;
+	max-width: 1000px; /* 원하시는 최대 크기로 제한 */
+	margin: 0 auto; /* 가운데 정렬 */
+}
+
+.service-card:hover {
+	transform: translateY(-5px);
+	box-shadow: 0 15px 35px rgba(200, 162, 200, 0.4);
+}
+
+.service-card-left h1 {
+	margin: 0 0 8px 0;
+	color: #000;
+}
+
+.service-card-left h1 strong {
+	color: #6b4c6b;
+	font-size: 28px;
+}
+
+.service-card-right {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
+
+.banking-btn {
+	padding: 14px 28px;
+	border-radius: 25px;
+	background: linear-gradient(135deg, #c8a2c8 0%, #a569a5 100%);
+	color: white;
+	font-weight: 600;
+	text-decoration: none;
+	border: none;
+	text-align: center;
+	transition: 0.3s;
+}
+
+.banking-btn:hover {
+	background: linear-gradient(135deg, #a569a5 0%, #8b5a8c 100%);
+}
+
+@media ( max-width : 768px) {
+	.main-layout {
+		flex-direction: column;
+		padding: 10px;
+	}
+	.leftnav {
+		flex: 1;
+	}
+	.service-card {
+		flex-direction: column;
+		text-align: center;
+	}
+	.service-card-right {
+		flex-direction: row;
+		justify-content: center;
+		gap: 10px;
+	}
+}
+</style>
+</head>
+
+
+<main class="site-content" layout:fragment="content">
+  <div class="main-layout">
+			<!-- 왼쪽 사이드바 -->
+			<div
+				th:replace="~{fragments/MainSideBar :: sidebar(
+      ${userName}, 
+      ${userEmail}, 
+      ${totalAssets}, 
+      ${safeboxBalance}, 
+      ${goalPercent}, 
+      'Main')}"></div>
+
+			<!-- 우측 메인 컨텐츠 -->
+			<div class="container">
+				<section class="service-cards">
+
+
+					<!-- 통장 카드 -->
+					<article class="service-card" tabindex="0">
+						<div class="service-card-left">
+							<h1>
+								<strong th:text="${userName ?: '고객'}">고객</strong>님의 통장
+							</h1>
+							<div th:if="${hasAccount}" class="account-info">
+								<h2 class="account-number" th:text="${accountNumber}">110-000000-001</h2>
+
+								<div class="balance-text">
+									잔액: <span class="balance-amount">₩ <span
+										th:text="${#numbers.formatInteger(accountBalance, 3, 'COMMA')}">0</span>
+									</span>
+								</div>
+							</div>
+
+							<div th:unless="${hasAccount}" class="no-account">
+								<h2>계좌가 없습니다</h2>
+								<p>Own Wedding Wallet 계좌를 생성해주세요</p>
+							</div>
+						</div>
+						<div class="service-card-right">
+							<a
+								th:href="${@environment.getProperty('app.gateway-base-url')} + '/banking/transfer_1'"
+								class="banking-btn">이체하기</a> <a
+								th:href="${@environment.getProperty('app.gateway-base-url')} + '/banking/history'"
+								class="banking-btn">내역조회</a>
+						</div>
+					</article>
+
+					<!-- 차곡차곡금고 카드 -->
+					<article class="service-card" tabindex="0">
+						<div class="service-card-left">
+							<h1>
+								<strong th:text="${userName ?: '고객'}">고객</strong>님의 차곡차곡금고
+							</h1>
+							<div th:if="${hasSafebox}" class="safebox-info">
+								<div class="balance-text">
+									잔액: <span class="balance-amount">₩ <span
+										th:text="${#numbers.formatInteger(safeboxBalance, 3, 'COMMA')}">0</span>
+									</span>
+								</div>
+							</div>
+							<div th:unless="${hasSafebox}" class="no-safebox">
+								<h2>차곡차곡금고가 없습니다</h2>
+								<p>Own Wedding Wallet 차곡차곡금고를 개설해주세요</p>
+							</div>
+						</div>
+						<div class="service-card-right">
+							<a
+								th:href="${@environment.getProperty('app.gateway-base-url')} + '/banking/safebox/main'"
+								class="banking-btn">금고로 이동</a> <a
+								th:href="${@environment.getProperty('app.gateway-base-url')} + '/banking/safebox/history'"
+								class="banking-btn auth-btn" data-url="/api/check-jwt">내역조회</a>
+						</div>
+					</article>
+
+				</section>
+			</div>
+		</div>
+	</main>
+
+</html>

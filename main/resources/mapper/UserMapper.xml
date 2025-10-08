@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="oww.banking.mapper.UserMapper">
+
+<!-- UserVO 결과 매핑 - USER_EMAIL_HASH 추가 -->
+<resultMap id="UserResultMap" type="oww.banking.vo.UserVO">
+    <id property="userNo" column="USERNO"/>
+    <result property="userEmail" column="USER_EMAIL"/>
+    <result property="userEmailHash" column="USER_EMAIL_HASH"/>
+    <result property="name" column="NAME"/>
+    <result property="createdAt" column="CREATED_AT"/>
+    <result property="isActive" column="IS_ACTIVE"/>
+    <result property="providerId" column="PROVIDER_ID"/>
+    <result property="updatedAt" column="UPDATED_AT"/>
+    <result property="provider" column="PROVIDER"/>
+    <result property="role" column="ROLE"/>
+</resultMap>
+
+<!-- 해시로 사용자 조회 -->
+<select id="findByEmailHash" parameterType="String" resultMap="UserResultMap">
+    SELECT
+        USERNO,
+        USER_EMAIL,
+        USER_EMAIL_HASH,
+        NAME,
+        CREATED_AT,
+        IS_ACTIVE,
+        PROVIDER_ID,
+        UPDATED_AT,
+        PROVIDER,
+        ROLE
+    FROM OWW2.USERS
+    WHERE USER_EMAIL_HASH = #{emailHash}
+</select>
+
+<!-- 해시로 사용자 존재 여부 확인 -->
+<select id="existsByEmailHash" parameterType="String" resultType="boolean">
+    SELECT
+        CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END
+    FROM OWW2.USERS
+    WHERE USER_EMAIL_HASH = #{emailHash}
+</select>
+
+<!-- 새 사용자 생성 - USER_EMAIL_HASH 추가 -->
+<insert id="createUser" parameterType="oww.banking.vo.UserVO">
+    <selectKey keyProperty="userNo" resultType="int" order="BEFORE">
+        SELECT USER_SEQ.NEXTVAL FROM DUAL
+    </selectKey>
+    INSERT INTO OWW2.USERS (
+        USERNO,
+        USER_EMAIL,
+        USER_EMAIL_HASH,
+        NAME,
+        CREATED_AT,
+        IS_ACTIVE,
+        PROVIDER_ID,
+        UPDATED_AT,
+        PROVIDER,
+        ROLE
+    ) VALUES (
+        #{userNo},
+        #{userEmail},
+        #{userEmailHash},
+        #{name},
+        SYSTIMESTAMP,
+        #{isActive},
+        #{providerId},
+        SYSTIMESTAMP,
+        #{provider},
+        #{role}
+    )
+</insert>
+
+<!-- 기존 이메일 직접 조회 (필요시만 사용) -->
+<select id="findByEmail" parameterType="String" resultMap="UserResultMap">
+    SELECT * FROM OWW2.USERS WHERE USER_EMAIL = #{email}
+</select>
+
+</mapper>

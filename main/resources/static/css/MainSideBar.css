@@ -1,0 +1,183 @@
+:root {
+	--line: #e5e7eb;
+	--ink: #111827;
+	--sub: #6b7280;
+	--brand: #7c3aed;
+	--brand-weak: #f3e8ff;
+	--card: #fff;
+	--muted: #f9fafb;
+	--shadow: 0 10px 20px rgba(17, 24, 39, .08);
+	--r: 16px;
+}
+
+/* 컨테이너(위치/폭은 각 페이지 CSS에서 관리) */
+.leftnav {
+	background: var(--card);
+	border: 1px solid var(--line);
+	border-radius: var(--r);
+	box-shadow: var(--shadow);
+	padding: 14px;
+	color: var(--ink);
+}
+
+.ln-header {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+.ln-user {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+}
+
+.ln-hello {
+	font-weight: 800;
+}
+
+.ln-mail {
+	font-size: 12px;
+	color: var(--sub);
+}
+
+.ln-title {
+	font-weight: 800;
+	margin: 12px 6px 8px;
+}
+
+.ln-progress {
+	margin-top: 10px;
+}
+
+.ln-title-row {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.ln-pct {
+	font-size: 12px;
+	color: var(--sub);
+}
+
+.ln-bar {
+	height: 10px;
+	border: 1px solid var(--line);
+	border-radius: 999px;
+	background: #fff;
+	overflow: hidden;
+}
+
+.ln-fill {
+	height: 100%;
+	background: linear-gradient(90deg, var(--brand-weak), #e9d5ff);
+	width: 0;
+}
+
+.ln-summary {
+	margin: 12px 0 2px;
+}
+
+.ln-kpi {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 6px;
+}
+
+.kpi {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 8px 10px;
+	border: 1px solid var(--line);
+	border-radius: 12px;
+	background: #fff;
+}
+
+.kpi .t {
+	color: var(--sub);
+	font-size: 12px;
+	margin-left: auto;
+}
+
+.kpi .v {
+	font-weight: 800;
+}
+
+.ln-list {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	margin-top: 8px;
+}
+
+.ln-item {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 10px 12px;
+	border-radius: 12px;
+	color: var(--ink);
+	border: 1px solid var(--line);
+	background: #fff;
+	text-decoration: none;
+}
+
+.ln-item:hover {
+	border-color: #cbd5e1;
+	background: #fafafa;
+}
+
+.ln-item.active {
+	background: var(--brand-weak);
+	border-color: #e9d5ff;
+}
+
+.ln-item i.bx {
+	font-size: 18px;
+}
+
+.ln-help {
+	margin-top: 12px;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	color: var(--sub);
+	font-size: 12px;
+	line-height: 1.5;
+}
+
+/* 아이콘 공통(icons.css 의존) */
+.icon-box {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 32px;
+	height: 32px;
+	border-radius: 12px;
+	border: 1px solid var(--line);
+	background: var(--card);
+	box-shadow: 0 4px 10px rgba(17, 24, 39, .04);
+}
+
+.icon-box.--sm {
+	width: 28px;
+	height: 28px;
+	border-radius: 10px;
+}
+
+.icon-box.--xl {
+	width: 48px;
+	height: 48px;
+	border-radius: 16px;
+}
+
+.icon-box.brand {
+	background: var(--brand-weak);
+	border-color: #e9d5ff;
+}
+
+.icon-box i {
+	color: var(--ink);
+}

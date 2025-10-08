@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="oww.banking.mapper.TransferMapper">
+
+<resultMap id="TransferHistoryResultMap"
+    type="oww.banking.vo.TransferHistoryVO">
+    <id property="txId" column="tx_id" />
+    <result property="accountId" column="account_id" />
+    <result property="txType" column="tx_type" />
+    <result property="amount" column="amount" />
+    <result property="memo" column="memo" />
+    <result property="txDate" column="tx_date"
+        javaType="java.time.LocalDateTime" />
+    <result property="transferId" column="transfer_id" />  <!-- 추가 -->
+    <result property="accountNumber" column="account_number" />
+    <result property="otherAccountNumber"
+        column="other_account_number" />
+    <result property="otherUserName" column="other_user_name" />
+</resultMap>
+
+	<!-- 이메일 해시로 계좌 ID 조회 -->
+	<select id="findAccountIdByEmailHash" parameterType="String"
+		resultType="Integer">
+		SELECT a.account_id
+		FROM account a
+		INNER JOIN users u ON
+		a.user_email = u.user_email
+		WHERE u.user_email_hash = #{emailHash,
+		jdbcType=VARCHAR}
+	</select>
+
+	<select id="findAccountIdByNumber" resultType="Integer">
+		SELECT
+		a.account_id
+		FROM account a
+		WHERE a.account_number = #{accountNumber}
+	</select>
+
+	<!-- 이메일 해시로 계좌 정보 조회 -->
+	<select id="getAccountInfoByEmailHash" parameterType="String"
+		resultType="oww.banking.vo.TransferVO">
+		SELECT
+		a.account_id AS fromAccountId,
+		a.account_number AS
+		fromAccountNumber,
+		u.name AS fromUserName,
+		a.balance AS amount
+		FROM
+		account a
+		JOIN users u ON a.user_email = u.user_email
+		WHERE
+		u.user_email_hash = #{emailHash, jdbcType=VARCHAR}
+	</select>
+
+
+	<!-- 계좌 비밀번호 확인 -->
+	<select id="checkAccountPassword" parameterType="map"
+		resultType="boolean">
+		SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END
+		FROM account
+		a
+		INNER JOIN users u ON a.user_email = u.user_email
+		WHERE a.account_id =
+		#{accountId} AND a.account_password = #{password}
+		AND u.is_active = 1
+	</select>
+
+	<!-- 잔액 조회 -->
+	<select id="getBalanceByAccountId" parameterType="Integer"
+		resultType="java.math.BigDecimal">
+		SELECT balance
+		FROM account
+		WHERE account_id = #{accountId}
+	</select>
+
+	<!-- 잔액 업데이트 -->
+	<update id="updateBalance" parameterType="map">
+		UPDATE account
+		SET
+		balance = #{balance}
+		WHERE account_id = #{accountId}
+	</update>
+
+	<!-- 이체 내역 저장 -->
+	<insert id="insertTransfer"
+		parameterType="oww.banking.vo.TransferVO">
+		<selectKey keyProperty="transferId" resultType="int"
+			order="BEFORE">
+			SELECT TRANSFER_SEQ.NEXTVAL FROM DUAL
+		</selectKey>
+		INSERT INTO transfer (
+		transfer_id,
+		from_account_id,
+		to_account_id,
+		amount,
+		memo,
+		transfer_date
+		) VALUES (
+		#{transferId},
+		#{fromAccountId},
+		#{toAccountId},
+		#{amount},
+		#{memo},
+		CURRENT_TIMESTAMP
+		)
+	</insert>
+
+
+	<!-- 거래내역 저장 -->
+	<insert id="insertTransferHistory"
+		parameterType="oww.banking.vo.TransferHistoryVO">
+		<selectKey keyProperty="txId" resultType="int"
+			order="BEFORE">
+			SELECT TRANSFER_HISTORY_SEQ.NEXTVAL FROM DUAL
+		</selectKey>
+		INSERT INTO transfer_history (
+		tx_id,
+		account_id,
+		tx_type,
+		amount,
+		memo,
+		tx_date,
+		transfer_id 
+		) VALUES (
+		#{txId},
+		#{accountId},
+		#{txType},
+		#{amount},
+		#{memo},
+		CURRENT_TIMESTAMP,
+		#{transferId, jdbcType=INTEGER}
+		)
+	</insert>
+	
+	
+	<!-- 이메일 해시로 계좌별 거래내역 조회 -->
+	<select id="getTransferHistoryByEmailHash"
+		parameterType="String" resultMap="TransferHistoryResultMap">
+		SELECT th.tx_id, th.account_id, th.tx_type, th.amount, th.memo, th.tx_date,
+		a.account_number,
+		CASE
+		WHEN th.tx_type = 'TRANSFER_OUT' THEN (
+		SELECT a2.account_number
+		FROM transfer t
+		JOIN account a2 ON t.to_account_id = a2.account_id
+		WHERE t.transfer_id = th.transfer_id
+		)
+		WHEN th.tx_type = 'TRANSFER_IN' THEN (
+		SELECT a2.account_number
+		FROM transfer t
+		JOIN account a2 ON t.from_account_id = a2.account_id
+		WHERE t.transfer_id = th.transfer_id
+		)
+		END as other_account_number,
+		CASE
+		WHEN th.tx_type = 'TRANSFER_OUT' THEN (
+		SELECT u.name
+		FROM transfer t
+		JOIN account a2 ON t.to_account_id = a2.account_id
+		JOIN users u ON a2.user_email = u.user_email
+		WHERE t.transfer_id = th.transfer_id
+		)
+		WHEN th.tx_type = 'TRANSFER_IN' THEN (
+		SELECT u.name
+		FROM transfer t
+		JOIN account a2 ON t.from_account_id = a2.account_id
+		JOIN users u ON a2.user_email = u.user_email
+		WHERE t.transfer_id = th.transfer_id
+		)
+		END as other_user_name
+		FROM transfer_history th
+		JOIN account a ON th.account_id = a.account_id
+		JOIN users u_main ON a.user_email = u_main.user_email
+		WHERE u_main.user_email_hash = #{emailHash, jdbcType=VARCHAR}
+		ORDER BY th.tx_date DESC
+	</select>
+
+	<select id="getAccountPassword" resultType="String">
+		SELECT
+		a.account_password
+		FROM account a
+		INNER JOIN users u ON a.user_email =
+		u.user_email
+		WHERE a.account_id = #{accountId} AND u.is_active = 1
+	</select>
+
+
+	<select id="getAccountInfoByNumber" parameterType="string"
+		resultType="map">
+		SELECT
+		a.account_id as ACCOUNT_ID,
+		a.user_email as
+		USER_EMAIL,
+		a.account_number as ACCOUNT_NUMBER,
+		a.balance as BALANCE,
+		u.name as USER_NAME
+		FROM account a
+		INNER JOIN OWW2.users u ON
+		a.user_email = u.user_email
+		WHERE a.account_number = #{accountNumber}
+	</select>
+
+
+
+</mapper>

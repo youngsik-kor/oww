@@ -1,0 +1,148 @@
+<!-- 
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+   파라미터: active (현재 메뉴)
+   <div th:fragment="siteHeader(active)">
+      <header class="main-header">
+         <div class="header-wrapper">
+            <div class="main-logo">OWW</div>
+            <nav>
+               <ul class="main-menu">
+                  <li><a href="#section-2">About</a></li>
+                  
+                  Bank 메뉴 (드롭다운)
+                  <li class="nav-item">
+                     <a th:href="@{/banking/main}">Bank</a>
+                     <div class="dropdown">
+                        <a th:href="@{/banking/createAccount}" class="banking-btn" 
+                           data-url="http://localhost:8201/banking/createAccount" 
+                           data-redirect="/banking/createAccount">계좌생성</a>
+                        <a th:href="@{/banking/transfer_1}" class="banking-btn" 
+                           data-url="http://localhost:8201/banking/transfer_1" 
+                           data-redirect="/banking/transfer_1">이체</a>
+                        <a th:href="@{/banking/safebox/main}" class="banking-btn" 
+                           data-url="http://localhost:8201/banking/safebox/main" 
+                           data-redirect="/banking/safebox/main">세이프박스</a>
+                     </div>
+                  </li>
+                  
+                  Wedding Plan 메뉴 (드롭다운)
+                  <li class="nav-item">
+                     <a href="#section-7">Wedding Plan</a>
+                     <div class="dropdown">
+                        <a href="#wedding-theme">추천테마</a>
+                        <a href="#wedding-diy">DIY</a>
+                     </div>
+                  </li>
+                  
+                  Loan 메뉴 (드롭다운)
+                  <li class="nav-item">
+                     <a th:href="@{/loan/loanmain}" class="loan-btn" 
+                        data-url="http://localhost:8201/loan/loanmain" 
+                        data-redirect="/loan/loanmain">Loan</a>
+                     <div class="dropdown">
+                        <a th:href="@{/loan/loancomparison}" class="loan-btn" 
+                           data-url="http://localhost:8201/loan/loancomparison" 
+                           data-redirect="/loan/loancomparison">대출상품 비교</a>
+                        <a th:href="@{/loan/repayment}" class="loan-btn" 
+                           data-url="http://localhost:8201/loan/repayment" 
+                           data-redirect="/loan/repayment">대출상환</a>
+                        <a th:href="@{/loan/costcalculate}" class="loan-btn" 
+                           data-url="http://localhost:8201/loan/costcalculate" 
+                           data-redirect="/loan/costcalculate">상환부담 계산</a>
+                     </div>
+                  </li>
+                  
+                  <li><a href="#main-footer">Mypage</a></li>
+                  
+                  로그인 기능
+                  <li class="auth-menu-item">
+                     <div id="logged-out-section" style="display: none;">
+                        <a href="#" onclick="login()" class="login-link">로그인</a>
+                     </div>
+                     <div id="logged-in-section" style="display: none;">
+                        <span id="user-name-header">사용자님</span>
+                        <a href="#" onclick="logout()" class="logout-link">로그아웃</a>
+                     </div>
+                  </li>
+               </ul>
+            </nav>
+         </div>
+      </header>
+   </div>
+</body>
+</html>
+
+ -->
+ 
+ 
+ <!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+
+   <!-- 파라미터: active (현재 메뉴) -->
+   <div th:fragment="siteHeader(active)">
+<header class="site-header">
+         <div class="site-header__inner">
+            <h1 class="brand">
+               <a th:href="@{/}">
+                  <img src="/img/owwlogo3.png" alt="프로필" class="logo">
+               </a>
+            </h1>
+            <div id="tsparticles" class="site-header__fx" aria-hidden="true"></div>
+         </div>
+      </header>
+      
+      
+      
+
+      <!-- 새로운 파티클 스크립트 추가 -->
+      <script>
+      tsParticles.load("tsparticles", {
+        particles: {
+          number: {
+            value: 50,
+            density: {
+              enable: true,
+              value_area: 800
+            }
+          },
+          color: {
+            value: ["#FADADD", "#E6CCFF", "#FFFFFF"] // 연핑크, 라일락, 진주색
+          },
+          shape: {
+            type: "image",
+            image: [
+              { src: "/img/particles/diamond1(1).png", width: 64, height: 56 },
+              { src: "/img/particles/diamond2(1).png", width: 64, height: 66 },
+            ]
+          },
+          opacity: {
+            value: 0.9,
+            random: true
+          },
+          size: {
+            value: 32,
+            random: { enable: true, minimumValue: 16 }
+          },
+          move: {
+            direction: "random",
+            enable: true,
+            speed: 2.7,
+            outModes: {
+              default: "out"
+            },
+            straight: false
+          }
+        },
+        detectRetina: true,
+        fullScreen: {
+          enable: false // ❗ header 영역 안에서만 동작하도록 설정
+        }
+      });
+      </script>
+   </div>
+</body>
+</html>

@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/banking_base}">
+<head>
+    <title layout:fragment="title">Own Wedding Wallet - 차곡차곡금고</title>
+
+    <style layout:fragment="page-styles">
+        /* 전체 레이아웃 */
+        .main-layout {
+            display: flex;
+            flex-direction: row;
+            gap: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* 사이드바 (왼쪽) */
+        .leftnav {
+            width: 260px;
+            flex-shrink: 0;
+        }
+
+        /* 메인 컨텐츠 (오른쪽) */
+        .container {
+            flex: 1;
+            max-width: 100%;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            padding: 32px 40px;
+            box-shadow: 0 8px 25px rgba(200, 162, 200, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-sizing: border-box;
+            max-width:600px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #8b5a8c;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        /* 세이프박스/잔액 정보 */
+        .balance-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 16px;
+            color: #a569a5;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(200, 162, 200, 0.3);
+        }
+
+        .balance-info:last-of-type {
+            border-bottom: none;
+            margin-bottom: 20px;
+        }
+
+        #balance, #savedAmount {
+            font-size: 20px;
+            font-weight: 600;
+            color: #6b4c6b;
+        }
+
+        /* 슬라이더 스타일 */
+        .slider-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        .slider-label {
+            font-size: 24px;
+            font-weight: 700;
+            color: #6b4c6b;
+        }
+
+        #slider {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 10px;
+            background: #e1bee7;
+            border-radius: 5px;
+            outline: none;
+            transition: opacity .2s;
+        }
+
+        #slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 25px;
+            height: 25px;
+            background: #a569a5;
+            border: 2px solid white;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        #slider::-moz-range-thumb {
+            width: 25px;
+            height: 25px;
+            background: #a569a5;
+            border: 2px solid white;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        .step-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .step-buttons button {
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid #c8a2c8;
+            color: #8b5a8c;
+            padding: 8px 15px;
+            border-radius: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .step-buttons button:hover {
+            background: #e1bee7;
+            color: #6b4c6b;
+            border-color: #a569a5;
+        }
+
+        /* 버튼 공통 스타일 */
+        .submit-btn {
+            width: 100%;
+            padding: 14px 28px;
+            border-radius: 25px;
+            background: linear-gradient(135deg, #c8a2c8 0%, #a569a5 100%);
+            color: white;
+            font-weight: 600;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(165, 105, 165, 0.3);
+            text-align: center;
+            font-size: 16px;
+            margin-top: 15px;
+        }
+
+        .submit-btn:hover {
+            background: linear-gradient(135deg, #a569a5 0%, #8b5a8c 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(139, 90, 140, 0.4);
+        }
+
+        /* 참고 사항 */
+        .note {
+            font-size: 14px;
+            color: #a569a5;
+            text-align: center;
+            line-height: 1.5;
+            margin-top: 20px;
+        }
+
+        /* 폼 그룹 */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #8b5a8c;
+        }
+
+        .form-group input[type="number"],
+        .form-group input[type="date"] {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid #e1bee7;
+            background: rgba(255, 255, 255, 0.7);
+            color: #6b4c6b;
+            box-sizing: border-box;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #c8a2c8;
+            box-shadow: 0 0 5px rgba(200, 162, 200, 0.5);
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 20px;
+        }
+
+        .radio-group label {
+            font-weight: normal;
+            color: #6b4c6b;
+        }
+
+        /* 저축 목표 리스트 */
+        .goal-item {
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border: 1px solid rgba(200, 162, 200, 0.3);
+        }
+
+        .goal-item h4 {
+            margin: 0 0 10px 0;
+            color: #6b4c6b;
+            font-size: 18px;
+        }
+
+        .goal-item p {
+            margin: 5px 0;
+            color: #a569a5;
+        }
+
+        .goal-item button {
+            margin-top: 10px;
+            background: linear-gradient(135deg, #a569a5 0%, #8b5a8c 100%);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 8px 15px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .goal-item button:hover {
+            background: #6b4c6b;
+        }
+
+        /* 로딩 상태 표시 */
+        .loading {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        /* 반응형 */
+        @media (max-width: 768px) {
+            .main-layout {
+                flex-direction: column;
+            }
+            .leftnav {
+                width: 100%;
+            }
+            .container {
+                width: 100%;
+            }
+            .card {
+                padding: 24px 20px;
+            }
+            .section-title {
+                font-size: 20px;
+            }
+            .balance-info {
+                font-size: 14px;
+            }
+            #balance, #savedAmount {
+                font-size: 18px;
+            }
+            .slider-label {
+                font-size: 20px;
+            }
+            .step-buttons {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .step-buttons button {
+                flex-grow: 1;
+            }
+            .radio-group {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .step-buttons button {
+                padding: 10px 12px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main class="site-content" layout:fragment="content">
+        <div class="main-layout">
+
+            <!-- 왼쪽 사이드바 -->
+            <div th:replace="~{fragments/MainSideBar :: sidebar(
+                ${userName}, 
+                ${userEmail}, 
+                ${totalAssets}, 
+                ${safeboxBalance}, 
+                ${goalPercent}, 
+                'Main')}"></div>
+
+            <!-- 오른쪽 본문 -->
+            <div class="container">
+                <div class="card">
+                    <div class="section-title">차곡차곡금고 입출금</div>
+
+                    <div class="balance-info">
+                        <div>내 잔액</div>
+                        <div id="balance"
+                            th:text="'₩' + ${#numbers.formatInteger(balance ?: 0, 3, 'COMMA')}">₩1,200,000</div>
+                    </div>
+                    <div class="balance-info">
+                        <div>차곡차곡금고</div>
+                        <div id="savedAmount"
+                            th:text="'₩' + ${#numbers.formatInteger(safeboxBalance ?: 0, 3, 'COMMA')}">₩300,000</div>
+                    </div>
+
+                    <div class="slider-container">
+                        <div class="slider-label" id="currentAmount">₩300,000</div>
+                        <input type="range" id="slider" th:min="0"
+                            th:max="${totalAssets ?: 1200000}" step="10000"
+                            th:value="${safeboxBalance ?: 300000}" />
+                        <div class="step-buttons">
+                            <button onclick="adjust(-10000)">-1만</button>
+                            <button onclick="adjust(10000)">+1만</button>
+                        </div>
+                    </div>
+
+                    <button class="submit-btn" onclick="submitAmount()">금액 설정하기</button>
+
+                    <div class="note">
+                        차곡차곡금고 해제 예정일: 2025.08.10<br /> 출금은 해제일 이후에 가능합니다.
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="section-title">정기저금통 설정</div>
+
+                    <form id="autoSaveForm">
+                        <div class="form-group">
+                            <label>목표 금액</label> 
+                            <input type="number" id="goalAmount" name="goalAmount" placeholder="예: 500000" required />
+                        </div>
+
+                        <div class="form-group">
+                            <label>시작일</label> 
+                            <input type="date" id="startDate" name="startDate" required />
+                        </div>
+
+                        <div class="form-group">
+                            <label>종료일 (목표 달성일)</label> 
+                            <input type="date" id="endDate" name="endDate" required />
+                        </div>
+
+                        <div class="form-group">
+                            <label>자동 저축 주기</label>
+                            <div class="radio-group">
+                                <label><input type="radio" name="cycle" value="daily" checked /> 매일</label> 
+                                <label><input type="radio" name="cycle" value="monthly" /> 매월</label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>자동 저축 금액</label> 
+                            <input type="number" id="autoAmount" placeholder="자동 계산됨" readonly />
+                        </div>
+
+                        <button class="submit-btn" type="submit">정기저금통 설정하기</button>
+                    </form>
+                </div>
+
+                <div class="card" th:if="${goals != null and !goals.isEmpty()}">
+                    <div class="section-title">내 저축 목표</div>
+                    <div th:each="goal : ${goals}" class="goal-item">
+                        <h4 th:text="${goal.title}">저축 목표</h4>
+                        <p>
+                            목표 금액: <span
+                                th:text="'₩' + ${#numbers.formatInteger(goal.targetAmount, 3, 'COMMA')}">₩500,000</span>
+                        </p>
+                        <p>
+                            기간: <span th:text="${goal.startDate}">2025-01-01</span> ~ <span
+                                th:text="${goal.endDate}">2025-12-31</span>
+                        </p>
+                        <p>
+                            저축 주기: <span th:text="${goal.paymentType == 'daily' ? '매일' : '매월'}">매일</span>
+                        </p>
+                        <button th:onclick="|viewGoalDetail(${goal.goalId})|">상세보기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div layout:fragment="scripts">
+        <script src="/js/auth-buttons.js"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        
+<script th:inline="javascript">
+        // JWT는 게이트웨이에서 처리되므로 CSRF 토큰 불필요
+
+        // 쿠키 값을 가져오는 헬퍼 함수
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+            return null;
+        }
+
+        // jQuery AJAX 기본 설정 - 모든 요청에 JWT 토큰 자동 추가
+        $.ajaxSetup({
+            xhrFields: {
+                withCredentials: true
+            },
+            beforeSend: function(xhr, settings) {
+                // 쿠키에서 jwt-token 가져오기
+                const jwtToken = getCookie('jwt-token');
+                if (jwtToken) {
+                    xhr.setRequestHeader('Authorization', 'Bearer ' + jwtToken);
+                }
+                
+                // POST 요청에 Content-Type 설정
+                if (settings.type === 'POST' && !settings.contentType) {
+                    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+                }
+            }
+        });
+
+        // 세이프박스 로직
+        const slider = document.getElementById("slider");
+        const currentAmount = document.getElementById("currentAmount");
+        const savedDisplay = document.getElementById("savedAmount");
+        const balanceDisplay = document.getElementById("balance");
+
+        function formatCurrency(value) {
+          return '₩' + value.toLocaleString();
+        }
+
+        // 초기값 설정
+        const initialSafeboxBalance = /*[[${safeboxBalance}]]*/ 0;
+        const totalAssets = /*[[${totalAssets}]]*/ 1200000;
+        
+        slider.value = initialSafeboxBalance;
+        currentAmount.textContent = formatCurrency(initialSafeboxBalance);
+
+        slider.addEventListener("input", () => {
+          currentAmount.textContent = formatCurrency(Number(slider.value));
+        });
+
+        function adjust(amount) {
+          let newValue = Number(slider.value) + amount;
+          newValue = Math.min(Math.max(newValue, Number(slider.min)), Number(slider.max));
+          slider.value = newValue;
+          currentAmount.textContent = formatCurrency(newValue);
+        }
+
+        function submitAmount() {
+          const amount = Number(slider.value);
+          
+          // 토큰 확인
+          const jwtToken = getCookie('jwt-token');
+          if (!jwtToken) {
+              alert('인증이 필요합니다. 다시 로그인해주세요.');
+              window.location.href = '/login';
+              return;
+          }
+          
+          $.ajax({
+            url: '/banking/safebox/setAmount',
+            type: 'POST',
+            headers: {
+                'Authorization': 'Bearer ' + jwtToken,
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+            },
+            data: {
+              amount: amount
+            },
+            success: function(response) {
+              if (response.success) {
+                savedDisplay.textContent = formatCurrency(response.safeboxBalance);
+                balanceDisplay.textContent = formatCurrency(response.accountBalance);
+                alert(response.message);
+              } else {
+                alert(response.message);
+              }
+            },
+            error: function(xhr, status, error) {
+              console.error('AJAX Error:', xhr.responseText);
+              if (xhr.status === 401) {
+                alert('인증이 만료되었습니다. 다시 로그인해주세요.');
+                // JWT 토큰 삭제
+                document.cookie = "jwt-token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+                window.location.href = '/login';
+              } else if (xhr.status === 403) {
+                alert('접근 권한이 없습니다.');
+              } else {
+                alert('서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
+              }
+            }
+          });
+        }
+
+        // 정기저금통 로직
+        const goalInput = document.getElementById("goalAmount");
+        const startDate = document.getElementById("startDate");
+        const endDate = document.getElementById("endDate");
+        const autoAmount = document.getElementById("autoAmount");
+
+        function calculateAutoSaveAmount() {
+          const goal = Number(goalInput.value);
+          const start = new Date(startDate.value);
+          const end = new Date(endDate.value);
+          const cycle = document.querySelector('input[name="cycle"]:checked').value;
+
+          if (!goal || !startDate.value || !endDate.value || start >= end) {
+            autoAmount.value = '';
+            return;
+          }
+
+          const msPerDay = 24 * 60 * 60 * 1000;
+          const diffDays = Math.ceil((end - start) / msPerDay);
+          const diffMonths = Math.ceil(diffDays / 30);
+
+          let periods = cycle === 'daily' ? diffDays : diffMonths;
+          if (periods <= 0) {
+            autoAmount.value = '';
+            return;
+          }
+
+          const perAmount = Math.ceil(goal / periods);
+          autoAmount.value = perAmount;
+        }
+
+        goalInput.addEventListener("input", calculateAutoSaveAmount);
+        startDate.addEventListener("change", calculateAutoSaveAmount);
+        endDate.addEventListener("change", calculateAutoSaveAmount);
+        document.querySelectorAll('input[name="cycle"]').forEach(radio => {
+          radio.addEventListener("change", calculateAutoSaveAmount);
+        });
+
+        document.getElementById("autoSaveForm").addEventListener("submit", function (e) {
+          e.preventDefault();
+          
+          // 토큰 확인
+          const jwtToken = getCookie('jwt-token');
+          if (!jwtToken) {
+              alert('인증이 필요합니다. 다시 로그인해주세요.');
+              window.location.href = '/login';
+              return;
+          }
+          
+          const formData = {
+            goalAmount: goalInput.value,
+            startDate: startDate.value,
+            endDate: endDate.value,
+            cycle: document.querySelector('input[name="cycle"]:checked').value
+          };
+
+          $.ajax({
+            url: '/banking/safebox/createGoal',
+            type: 'POST',
+            headers: {
+                'Authorization': 'Bearer ' + jwtToken,
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+            },
+            data: formData,
+            success: function(response) {
+              if (response.success) {
+                alert(response.message);
+                location.reload();
+              } else {
+                alert(response.message);
+              }
+            },
+            error: function(xhr, status, error) {
+              console.error('AJAX Error:', xhr.responseText);
+              if (xhr.status === 401) {
+                alert('인증이 만료되었습니다. 다시 로그인해주세요.');
+                // JWT 토큰 삭제
+                document.cookie = "jwt-token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+                window.location.href = '/login';
+              } else if (xhr.status === 403) {
+                alert('접근 권한이 없습니다.');
+              } else {
+                alert('서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
+              }
+            }
+          });
+        });
+
+        function viewGoalDetail(goalId) {
+          window.location.href = '/banking/safebox/goal/' + goalId;
+        }
+
+        $(document).ready(function() {
+          updateSafeboxInfo();
+        });
+
+        function updateSafeboxInfo() {
+          const jwtToken = getCookie('jwt-token');
+          
+          $.ajax({
+            url: '/banking/safebox/info',
+            type: 'GET',
+            headers: jwtToken ? { 'Authorization': 'Bearer ' + jwtToken } : {},
+            success: function(response) {
+              if (response.success) {
+                balanceDisplay.textContent = formatCurrency(response.accountBalance);
+                savedDisplay.textContent = formatCurrency(response.safeboxBalance);
+                slider.max = response.totalAssets;
+              }
+            },
+            error: function(xhr) {
+              console.log('정보 업데이트 중 오류가 발생했습니다.');
+              if (xhr.status === 401) {
+                // 조용히 처리 (페이지 로드 시 발생할 수 있음)
+                console.log('인증이 필요합니다.');
+              }
+            }
+          });
+        }
+</script>
+    </div>
+</body>
+</html>
